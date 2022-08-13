@@ -10,26 +10,10 @@ const StyledText = styled.Text`
   font-size: 30px;
 `;
 
-export const Calender = () => {
-    return(
-        <Container>
-            <StyledText>Mail</StyledText>
-        </Container>
-    );
-};
-
 export const Chat = () => {
     return(
         <Container>
             <StyledText>Chat</StyledText>
-        </Container>
-    );
-};
-
-export const Lens = () => {
-    return(
-        <Container>
-            <StyledText>Lens</StyledText>
         </Container>
     );
 };
