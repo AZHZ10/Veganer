@@ -1,6 +1,9 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Calender, Chat, Lens } from "../screens/TabScreen";
+import { Calender } from "../screens/CalenderScreen";
+import { Chat } from "../screens/ChatScreen";
+import { Lens } from "../screens/LenScreen";
+//import { Calender, Chat, Lens } from "../screens/TabScreen";
 
 const Tab = createBottomTabNavigator();
 
