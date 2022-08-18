@@ -7,9 +7,6 @@ const Container = styled.View`
   justify-content: center;
   align=items: center;
 `;
-const StyledText = styled.Text`
-  font-size: 30px;
-`;
 
 export const Chat = () => {
   const [text, setText] = useState('');
