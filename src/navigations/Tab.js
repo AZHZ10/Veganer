@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Calender } from "../screens/CalenderScreen";
+import { CalenderApp } from "../screens/CalenderScreen";
 import { Chat } from "../screens/ChatScreen";
 import { Lens } from "../screens/LenScreen";
 //import { Calender, Chat, Lens } from "../screens/TabScreen";
@@ -10,7 +10,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigation = () => {
     return(
         <Tab.Navigator>
-            <Tab.Screen name ="Calender" component = {Calender} />
+            <Tab.Screen name ="Calender" component = {CalenderApp} />
             <Tab.Screen name ="Chat" component = {Chat} />
             <Tab.Screen name ="Lens" component = {Lens} />
         </Tab.Navigator>
