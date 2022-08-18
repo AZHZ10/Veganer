@@ -1,0 +1,8 @@
+2. 설정 > 휴대전화 정보 > 소프트웨어 정보 > 빌드번호 7번 클릭 > 개발자 모드 전환
+3. 설정 > 개발자 옵션 > USB 디버깅 ON
+4. USB 포트로 기기와 노트북 연결
+5. adb devices 입력 후 내 기기가 device로 뜨는지 확인
+6. adb reverse tcp:8081 tcp:8081 입력
+7. VS code에서 `npm run android`
+    
+    `react-native run-android`

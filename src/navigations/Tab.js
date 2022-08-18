@@ -8,11 +8,11 @@ import { Lens } from "../screens/LenScreen";
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
-    return(
+    return (
         <Tab.Navigator>
-            <Tab.Screen name ="Calender" component = {Calender} />
-            <Tab.Screen name ="Chat" component = {Chat} />
-            <Tab.Screen name ="Lens" component = {Lens} />
+            <Tab.Screen name="Calender" component={Calender} />
+            <Tab.Screen name="Chat" component={Chat} />
+            <Tab.Screen name="Lens" component={Lens} />
         </Tab.Navigator>
     );
 };
