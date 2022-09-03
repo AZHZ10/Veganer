@@ -61,7 +61,7 @@ function CameraButton(){
                }}
                style={styles.circle}
                onPress={() => setModalVisible(true)}>
-             <Icon name = "camera-alt" color = "white" size={27} />
+             <Icon name = "camera-alt" color = "white" size={25} />
            </Pressable>
         </View>
         <UploadModeModal 
