@@ -4,6 +4,7 @@ import {View, Dimensions} from 'react-native';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import {LocaleConfig} from 'react-native-calendars';
 import CalendarHeader from 'react-native-calendars/src/calendar/header';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const Width = Dimensions.get('window').width;    //스크린 너비 초기화
 const Height = Dimensions.get('window').height;  //스크린 높이 초기화
@@ -110,16 +111,21 @@ export const CalenderApp = () => {
         // Handler which gets executed when visible month changes in calendar. Default = undefined
         onMonthChange={(month) => {console.log('month changed', month)}}
         // Hide month navigation arrows. Default = false
-        hideArrows={true}
+        hideArrows={false}
         // Replace default arrows with custom ones (direction can be 'left' or 'right')
-        renderArrow={(direction) => (<Arrow/>)}
+        renderArrow={(direction) => direction === "left" ? (
+          <Icon name="caretleft" size={20} color="#81CC7E" />
+            ) : (
+          <Icon name="caretright" size={20} color="#81CC7E" />
+            )
+        }
         // Do not show days of other months in month page. Default = false
         hideExtraDays={true}
         // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
         // day from another month that is visible in calendar page. Default = false
         disableMonthChange={true}
         // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
-        firstDay={1}
+        firstDay={7}
         // Hide day names. Default = false
         hideDayNames={false}
         // Show week numbers to the left. Default = false
@@ -129,9 +135,9 @@ export const CalenderApp = () => {
         // Handler which gets executed when press arrow icon right. It receive a callback can go next month
         onPressArrowRight={addMonth => addMonth()}
         // Disable left arrow. Default = false
-        disableArrowLeft={true}
+        disableArrowLeft={false}
         // Disable right arrow. Default = false
-        disableArrowRight={true}
+        disableArrowRight={false}
         // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
         disableAllTouchEventsForDisabledDays={true}
         /** Replace default month and year title with custom one. the function receive a date as parameter. */
