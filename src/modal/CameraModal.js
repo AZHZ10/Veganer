@@ -2,12 +2,17 @@ import React from "react";
 import { StyleSheet, Modal, View, Pressable, Text } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
+import { useNavigation } from '@react-navigation/native';
+import RectangleScanner from "../components/RectangleScannerScreen";
+
 function UploadModeModal({
   visible, 
   onClose, 
   onLaunchCamera, 
   onLaunchImageLibrary,
+  RectangleScanner,
 }) {
+  const navigation = useNavigation();
   return (
     <Modal
       visible={visible}
@@ -19,9 +24,12 @@ function UploadModeModal({
           <Pressable
             style={styles.actionButton}
             android_ripple={{color: "#eee"}}
+            title = {`Go to ${RectangleScanner}`}
             onPress={() => {
-              onLaunchCamera();
-              onClose();
+              //onLaunchCamera 대신 navigation.navigate로 reactangle로 이동하도록....
+              //onLaunchCamera();
+              //onClose();
+              navigation.navigate('RectangleScanner');
             }} >
             <Icon name="camera-alt" color="#757575" size={24} style={styles.icon} />
             <Text style={styles.actionText}>메뉴판 촬영</Text>
@@ -30,8 +38,8 @@ function UploadModeModal({
             style={styles.actionButton}
             android_ripple={{color: "#eee"}}
             onPress={() => {
-              onLaunchImageLibrary();
-              onClose();
+             onLaunchImageLibrary();
+             onClose();
             }} >
             <Icon name="photo" color="#757575" size={24} style={styles.icon} />
             <Text style={styles.actionText}>사진 선택</Text>
