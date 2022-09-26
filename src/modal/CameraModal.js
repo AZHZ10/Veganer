@@ -21,20 +21,19 @@ function UploadModeModal({
       onRequestClose={onClose} >
       <Pressable style={styles.background} onPress={onClose}>
         <View style={styles.whiteBox}>
-          <Pressable
+          <Pressable  //Recatangle Scanner 사용해서 촬영
             style={styles.actionButton}
             android_ripple={{color: "#eee"}}
             title = {`Go to ${RectangleScanner}`}
             onPress={() => {
-              //onLaunchCamera 대신 navigation.navigate로 reactangle로 이동하도록....
-              //onLaunchCamera();
-              //onClose();
-              navigation.navigate('RectangleScanner');
+              //onLaunchCamera(); 대신 navigation.navigate로 reactangle로 이동하도록....
+              navigation.navigate('CameraScreens');
+              onClose();
             }} >
             <Icon name="camera-alt" color="#757575" size={24} style={styles.icon} />
             <Text style={styles.actionText}>메뉴판 촬영</Text>
           </Pressable>
-          <Pressable
+          <Pressable //갤러리에서 사진 선택
             style={styles.actionButton}
             android_ripple={{color: "#eee"}}
             onPress={() => {

@@ -1,9 +1,11 @@
 import React, {useLayoutEffect} from "react";
+
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {createStackNavigator} from '@react-navigation/stack';
+import {useRoute} from '@react-navigation/native';
 
-import { CalenderApp } from "../screens/CalenderScreen";
-import { Chat } from "../screens/ChatScreen";
+import { CalenderApp } from "./CalenderScreen";
+import { Chat } from "./ChatScreen";
 import CameraButton from "../components/CameraButton";
 import RectangleScannerScreen from "../components/RectangleScannerScreen";
 
@@ -23,16 +25,16 @@ function TabNavigation() {
         <View style={styles.block}>  
           <Tab.Navigator
           //이 부분 수정
-           initialRouteName="CalendarStack"
+           //initialRouteName="CalendarStack"
            screenOptions={{
             headerShown: false,
             tabBarShowLabel: false,
             tabBarActiveTintColor: "#3B8C66",
            }}>
            <Tab.Screen
-            name="CalendarStack"
-            //component={CalenderApp}
-            component={CalendarStackScreen}
+            name="Calendar"
+            //component={CalenderStackScreen}
+            component={CalenderApp}
             options={{
               tabBarIcon: ({color}) =>(
                 <Icon name = "calendar-today" size={24} color={color} />
@@ -54,16 +56,18 @@ function TabNavigation() {
       </>
     );
 }
-//calender화면 스택 (메뉴판 스캔 screen 포함)
+/*
+//calender 화면 스택 
+//쓸 일이... 없을 것 같기도 
 const CalendarStackScreen = ({navigation, route}) => {
   const getrouteName = async() => {
     const routeName = await getFocusedRouteNameFromRoute(route);
     
     if(routeName == 'Calendar' || routeName == undefined){
-      navigation.setOptions({tabBarVisible: true});
+      navigation.setOptions({tabBarStyle: { display: 'flex' }});
     }
     else{
-      navigation.setOptions({tabBarVisible: false});
+      navigation.setOptions({tabBarStyle: { display: 'none' }});
     }
     return routeName;
   };
@@ -77,14 +81,17 @@ const CalendarStackScreen = ({navigation, route}) => {
       <CalendarStack.Screen
         name = 'Calendar'
         options={({navigation, route}) => ({
-          tabBarVisible: true,
+           tabBarStyle: { display: 'flex' }
         })}
         component={CalenderApp}
       />
-      <CameraStack.Screen name = "RectangleScanner" component = {RectangleScannerScreen} />
     </Stack.Navigator>
   );
 };
+
+*/
+
+//Camera 화면 스택(메뉴판 촬영/사진 선택 -> 결과 출력까지의 화면)
 
 const styles = StyleSheet.create({
   block: {

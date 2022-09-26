@@ -1,9 +1,13 @@
-import React, {useState} from "react";
-import {View, Pressable, StyleSheet, Platform} from 'react-native';
-import {useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useState } from "react";
+import { View, Pressable, StyleSheet, Platform }  from 'react-native';
+
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRoute } from "@react-navigation/native";
+
 import { launchImageLibrary, launchCamera } from "react-native-image-picker";
-import UploadModeModal from "../modal/CameraModal";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
+
+import UploadModeModal from "../modal/CameraModal";
 
 const TABBAR_HEIGHT = 49;
 
@@ -51,6 +55,10 @@ function CameraButton(){
       
     }
   }
+
+  //컴포넌트 보이는 화면과 보이지 않는 화면
+
+  
 
     return (
       <>
