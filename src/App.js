@@ -1,14 +1,14 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import TabNavigation from './navigations/Tab';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import RootStack from './screens/RootStack';
 
 const App = () => {
     return(
       <SafeAreaProvider>
         <NavigationContainer>
-            <TabNavigation />
+            <RootStack />
         </NavigationContainer>
       </SafeAreaProvider>
     );
