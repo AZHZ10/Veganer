@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components/native';
-import {View, Dimensions} from 'react-native';
+import {View, Dimensions, StyleSheet, ImageBackground, Text} from 'react-native';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import {LocaleConfig} from 'react-native-calendars';
 import CalendarHeader from 'react-native-calendars/src/calendar/header';
@@ -27,11 +27,32 @@ LocaleConfig.locales['fr'] = {
 };
 LocaleConfig.defaultLocale = 'fr';
 
+const styles = StyleSheet.create({
+    header : {
+      flex : 1.5,
+      backgroundColor : '#B1DB99'
+    },
+    calendar : {
+      flex : 5
+    },
+    bgImage : {
+      width : '100%', height : '100%'
+    }
+
+
+})
 
 export const CalenderApp = () => {
 
   const markedDates = {
     '2022-09-15': {
+      customStyles: {
+        container: {
+          backgroundColor: '#8FD99F'
+        },
+      }
+    },
+    '2022-09-09': {
       customStyles: {
         container: {
           backgroundColor: '#8FD99F'
@@ -44,12 +65,24 @@ export const CalenderApp = () => {
           backgroundColor: '#BCE8C5',
         },
       }
+    },
+    '2022-10-31': {
+      customStyles: {
+        container: {
+          backgroundColor: '#8FD99F'
+        },
+      }
     }
   };
 
     return(
       <Container>
-        <View style={{ flex: 1 }}>
+        <View style= {styles.header}>
+          <ImageBackground source={require('../screens/hd-wallpaper-176722.jpg')} style={styles.bgImage}>
+            <Text>페스코 베지테리언</Text>
+          </ImageBackground>
+        </View>
+        <View style={ styles.calendar }>
         <Calendar 
           markingType={'custom'}
           markedDates={markedDates}         
@@ -57,8 +90,8 @@ export const CalenderApp = () => {
         theme={{
           'stylesheet.day.basic':{
             'base':{
-              width:30,
-              height:100
+              width : 30, 
+              height: 73
             }
           },
           'stylesheet.calendar.header': {
@@ -73,13 +106,10 @@ export const CalenderApp = () => {
           calendarBackground: '#ffffff',
           textSectionTitleColor: '#b6c1cd',
           textSectionTitleDisabledColor: '#d9e1e8',
-          selectedDayBackgroundColor: '#00adf5',
           selectedDayTextColor: '#ffffff',
           todayTextColor: '#009688',
           dayTextColor: '#2d4150',
           textDisabledColor: '#d9e1e8',
-          dotColor: '#00adf5',
-          selectedDotColor: '#ffffff',
           arrowColor: '#81CC7E',
           disabledArrowColor: '#d9e1e8',
           monthTextColor: 'black',
@@ -103,7 +133,7 @@ export const CalenderApp = () => {
         // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
         maxDate={'2030-12-31'}
         // Handler which gets executed on day press. Default = undefined
-        onDayPress={(day) => {console.log('selected day', day)}}
+        onDayPress={(day) => {setModalVisible(true);}}
         // Handler which gets executed on day long press. Default = undefined
         onDayLongPress={(day) => {console.log('selected day', day)}}
         // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
@@ -143,6 +173,7 @@ export const CalenderApp = () => {
         /** Replace default month and year title with custom one. the function receive a date as parameter. */
         //renderHeader={(date) => {/*Return JSX*/}}
         />
+
       </View>
       </Container>
 
