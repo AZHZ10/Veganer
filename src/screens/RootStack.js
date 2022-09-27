@@ -34,7 +34,9 @@ const CameraStackScreen = () => {
         <CameraStack.Screen 
           name = 'RectangleScanner'
           options={({navigation, route}) => ({
-            headerShown: false,
+            headerShown: true,
+            headerTransparent: true,
+            headerTitle: '',
           })}
           component = {RectangleScannerScreen} />
       </Stack.Navigator>
