@@ -1,6 +1,6 @@
 import { PropTypes } from 'prop-types';
 import React, { PureComponent } from 'react';
-import { ActivityIndicator, Animated, Dimensions, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Animated, Dimensions, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Scanner, { Filters, RectangleOverlay } from 'react-native-rectangle-scanner';
 
@@ -61,14 +61,14 @@ export default class RectangleScannerScreen extends PureComponent {
       this.turnOnCamera();
     }
 
-    //홈화면으로 돌아가기
+    //상단 화살표 누를 시 홈 화면(calendar로 돌아감)
     this.props.navigation.setOptions({
         headerTitleAlign: 'left',
         headerLeft: () => (
-          <TouchableOpacity
+          <Pressable
             onPress={() => {
               {
-                this.props.navigation.replace('Home');
+                this.props.navigation.replace('BottomTab'); 
               }
             }}>
             <Icon
@@ -77,10 +77,9 @@ export default class RectangleScannerScreen extends PureComponent {
               style={{paddingLeft: 10}}
               color="white"
             />
-          </TouchableOpacity>
+          </Pressable>
         ),
       });
-
   }
 
   componentDidUpdate() {
