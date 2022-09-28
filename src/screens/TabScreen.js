@@ -2,7 +2,7 @@ import React, {useLayoutEffect} from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {createStackNavigator} from '@react-navigation/stack';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import { CalenderApp } from "./CalenderScreen";
 import { Chat } from "./ChatScreen";
@@ -18,8 +18,10 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const CameraStack = createStackNavigator();
 const CalendarStack = createStackNavigator();
+const ChatStack = createStackNavigator();
 
 function TabNavigation() {
+  const navigation = useNavigation();
     return (
       <>
         <View style={styles.block}>  
@@ -32,8 +34,7 @@ function TabNavigation() {
             tabBarActiveTintColor: "#3B8C66",
            }}>
            <Tab.Screen
-            name="Calendar"
-            //component={CalenderStackScreen}
+            name="CalendarTab"
             component={CalenderApp}
             options={{
               tabBarIcon: ({color}) =>(
@@ -42,13 +43,20 @@ function TabNavigation() {
             }}
            />
            <Tab.Screen
-            name="Chat"
-            component={Chat}
+            name="ChatTab"
+            component={View}
+           // component={ChatStackScreen}
             options={{
               tabBarIcon: ({color}) =>(
                 <Icon name = "chat-bubble-outline" size={24} color={color} />
               ),
             }}
+            listeners = {() =>({
+              tabPress: (e) => {
+                e.preventDefault();
+                navigation.navigate("ChatScreen");
+              }
+            })}
            />  
            </Tab.Navigator>
          </View>
@@ -56,42 +64,6 @@ function TabNavigation() {
       </>
     );
 }
-/*
-//calender 화면 스택 
-//쓸 일이... 없을 것 같기도 
-const CalendarStackScreen = ({navigation, route}) => {
-  const getrouteName = async() => {
-    const routeName = await getFocusedRouteNameFromRoute(route);
-    
-    if(routeName == 'Calendar' || routeName == undefined){
-      navigation.setOptions({tabBarStyle: { display: 'flex' }});
-    }
-    else{
-      navigation.setOptions({tabBarStyle: { display: 'none' }});
-    }
-    return routeName;
-  };
-
-  useLayoutEffect(() => {
-    const routeName = getrouteName();
-  }, [navigation, route]);
-
-  return(
-    <Stack.Navigator>
-      <CalendarStack.Screen
-        name = 'Calendar'
-        options={({navigation, route}) => ({
-           tabBarStyle: { display: 'flex' }
-        })}
-        component={CalenderApp}
-      />
-    </Stack.Navigator>
-  );
-};
-
-*/
-
-//Camera 화면 스택(메뉴판 촬영/사진 선택 -> 결과 출력까지의 화면)
 
 const styles = StyleSheet.create({
   block: {
