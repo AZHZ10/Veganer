@@ -9,13 +9,11 @@ import Icon from 'react-native-vector-icons/AntDesign';
 const Width = Dimensions.get('window').width;    //스크린 너비 초기화
 const Height = Dimensions.get('window').height;  //스크린 높이 초기화
 
+// 이 부분 필요한지 검토
 const Container = styled.View`
   flex: 1;
   justify-content: center;
   align=items: center;
-`;
-const StyledText = styled.Text`
-  font-size: 30px;
 `;
 
 LocaleConfig.locales['fr'] = {
