@@ -6169,6 +6169,11 @@
   "resolved" "https://registry.npmjs.org/react-native-image-picker/-/react-native-image-picker-4.8.5.tgz"
   "version" "4.8.5"
 
+"react-native-make@^1.0.1":
+  "integrity" "sha512-+Wo2JSp6NyeKleH9aZcdPsW7X8KiBOZkwx6L65UkPCDbk4FlcYd4yw+YIuK0SUVFkUaFHTU1n8LjIjFpT+YICA=="
+  "resolved" "https://registry.npmjs.org/react-native-make/-/react-native-make-1.0.1.tgz"
+  "version" "1.0.1"
+
 "react-native-modal@^13.0.1":
   "integrity" "sha512-UB+mjmUtf+miaG/sDhOikRfBOv0gJdBU2ZE1HtFWp6UixW9jCk/bhGdHUgmZljbPpp0RaO/6YiMmQSSK3kkMaw=="
   "resolved" "https://registry.npmjs.org/react-native-modal/-/react-native-modal-13.0.1.tgz"
