@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AutoHeightImage from 'react-native-auto-height-image';
 
 const Container = styled.View`
   flex: 1;
@@ -77,6 +78,7 @@ export const Chat = () => {
 
   return (
     <Container>
+
       <TextInput
         placeholder='서버 답변은 이렇게 할 예정'
         value={serverAnswer}
@@ -89,8 +91,15 @@ export const Chat = () => {
           qnas[key].isQ ? (
             <View style={styles.question} key={key}>
               <Text style={styles.questionText}>{qnas[key].question}</Text>
-            </View>) : (<View style={styles.answer} key={key}>
-              <Text style={styles.answerText}>{qnas[key].serverAnswer}</Text>
+            </View>) : (
+            <View style={styles.answerWithChar}>
+              <AutoHeightImage
+                width={60}
+                source={require('./Veganee.png')}
+              />
+              <View style={styles.answer} key={key}>
+                <Text style={styles.answerText}>{qnas[key].serverAnswer}</Text>
+              </View>
             </View>))}
       </ScrollView>
       <TouchableOpacity onPress={deleteAll}>
@@ -150,6 +159,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     margin: 10
+  },
+  answerWithChar: {
+    flexDirection: 'row',
+    marginLeft: 5
   }
-
 })
