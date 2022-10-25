@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import AutoHeightImage from 'react-native-auto-height-image';
 
 const Container = styled.View`
   flex: 1;
@@ -8,37 +10,67 @@ const Container = styled.View`
   align=items: center;
 `;
 
+const STORAGE_KEY = '@VeganerQnas'
+
 export const Chat = () => {
-  const [text, setText] = useState('');
-  const [qnas, setQnas] = useState({});
+  const [question, setQuestion] = useState(''); //사용자 질문 저장
+  const [serverAnswer, setServerAnswer] = useState(''); //서버 답변 저장
+  const [qnas, setQnas] = useState({}); //qna 저장
 
-  const [serverAnswer, setServerAnswer] = useState('');
-
-  const onChangeText = (payload) => setText(payload);
+  const onChangeQuestion = (payload) => setQuestion(payload);
   const onChangeServerAnswer = (payload) => setServerAnswer(payload);
 
+  useEffect(() => { //기간이 지난 것을 지움
+    const initQnas = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem(STORAGE_KEY)
+        setQnas(JSON.parse(jsonValue));
+        return jsonValue != null ? JSON.parse(jsonValue) : {};
+      } catch (e) {
+        // error reading value
+        console.log('initQnas error:', e);
+      }
+    }
+    const getStorageQnas = initQnas();
+    console.log(getStorageQnas);
+  }, []); //처음 실행될 때
+
+  useEffect(() => {
+    const storeQnas = async (value) => {
+      try {
+        const jsonValue = JSON.stringify(value)
+        console.log('제이슨 밸류', value);
+        await AsyncStorage.setItem(STORAGE_KEY, jsonValue)
+      } catch (e) {
+        // saving error
+        alert(`An error has occurred ${error}`);
+      }
+    }
+    storeQnas(qnas);
+    console.log('run storeQnas');
+  }, [qnas]);
+
   const addQnas = () => {
-    if (text === '') {
+    if (question === '') {
       return;
     }
-    const newQnas = { ...qnas, [Date.now()]: { text, isQ: true } };
+    const date = new Date();
+    const newQnas = { ...qnas, [date.getTime()]: { question, isQ: true, date: date.getDate() } };
+    //const newQnas = { ...qnas, [Date.now()]: { question, isQ: true } };
     setQnas(newQnas);
-    setText('');
+    setQuestion('');
   }
 
   const addAnswers = () => {
     if (serverAnswer === '') {
       return;
     }
-    const newQnas = { ...qnas, [Date.now()]: { serverAnswer, isQ: false } };
+    const date = new Date();
+    const newQnas = { ...qnas, [date.getTime()]: { serverAnswer, isQ: false, date: date.getDate() } };
     setQnas(newQnas);
     setServerAnswer('');
   }
 
-
-  const saveQnas = async (toSave) => {
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(toSave))
-  }
   const deleteAll = () => {
     const emptyQnas = {}
     setQnas(emptyQnas);
@@ -46,6 +78,7 @@ export const Chat = () => {
 
   return (
     <Container>
+
       <TextInput
         placeholder='서버 답변은 이렇게 할 예정'
         value={serverAnswer}
@@ -57,9 +90,16 @@ export const Chat = () => {
         {Object.keys(qnas).map(key =>
           qnas[key].isQ ? (
             <View style={styles.question} key={key}>
-              <Text style={styles.questionText}>{qnas[key].text}</Text>
-            </View>) : (<View style={styles.answer} key={key}>
-              <Text style={styles.answerText}>{qnas[key].serverAnswer}</Text>
+              <Text style={styles.questionText}>{qnas[key].question}</Text>
+            </View>) : (
+            <View style={styles.answerWithChar}>
+              <AutoHeightImage
+                width={60}
+                source={require('./Veganee.png')}
+              />
+              <View style={styles.answer} key={key}>
+                <Text style={styles.answerText}>{qnas[key].serverAnswer}</Text>
+              </View>
             </View>))}
       </ScrollView>
       <TouchableOpacity onPress={deleteAll}>
@@ -67,8 +107,8 @@ export const Chat = () => {
       </TouchableOpacity>
       <TextInput
         placeholder='궁금한 게 있으신가요?'
-        value={text}
-        onChangeText={onChangeText}
+        value={question}
+        onChangeText={onChangeQuestion}
         onSubmitEditing={addQnas}
         style={styles.textinput}
       />
@@ -119,6 +159,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     margin: 10
+  },
+  answerWithChar: {
+    flexDirection: 'row',
+    marginLeft: 5
   }
-
 })
