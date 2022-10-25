@@ -20,13 +20,34 @@ export const Chat = () => {
   const onChangeServerAnswer = (payload) => setServerAnswer(payload);
 
   useEffect(() => { //기간이 지난 것을 지움
-    const date = new Date();
-
-    return () => {
-
+    const initQnas = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem(STORAGE_KEY)
+        setQnas(JSON.parse(jsonValue));
+        return jsonValue != null ? JSON.parse(jsonValue) : {};
+      } catch (e) {
+        // error reading value
+        console.log('initQnas error:', e);
+      }
     }
+    const getStorageQnas = initQnas();
+    console.log(getStorageQnas);
   }, []); //처음 실행될 때
 
+  useEffect(() => {
+    const storeQnas = async (value) => {
+      try {
+        const jsonValue = JSON.stringify(value)
+        console.log('제이슨 밸류', value);
+        await AsyncStorage.setItem(STORAGE_KEY, jsonValue)
+      } catch (e) {
+        // saving error
+        alert(`An error has occurred ${error}`);
+      }
+    }
+    storeQnas(qnas);
+    console.log('run storeQnas');
+  }, [qnas]);
 
   const addQnas = () => {
     if (question === '') {
@@ -36,7 +57,6 @@ export const Chat = () => {
     const newQnas = { ...qnas, [date.getTime()]: { question, isQ: true, date: date.getDate() } };
     //const newQnas = { ...qnas, [Date.now()]: { question, isQ: true } };
     setQnas(newQnas);
-    console.log(newQnas);
     setQuestion('');
   }
 
@@ -44,31 +64,11 @@ export const Chat = () => {
     if (serverAnswer === '') {
       return;
     }
-    const newQnas = { ...qnas, [Date.now()]: { serverAnswer, isQ: false } };
+    const date = new Date();
+    const newQnas = { ...qnas, [date.getTime()]: { serverAnswer, isQ: false, date: date.getDate() } };
     setQnas(newQnas);
     setServerAnswer('');
   }
-
-  const storeData = async (value) => {
-    try {
-      const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem(STORAGE_KEY, jsonValue)
-    } catch (e) {
-      // saving error
-      alert(`An error has occurred ${error}`);
-    }
-  }
-
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem('@storage_Key')
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      // error reading value
-    }
-  }
-
 
   const deleteAll = () => {
     const emptyQnas = {}
