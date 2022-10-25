@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Container = styled.View`
   flex: 1;
@@ -8,21 +9,34 @@ const Container = styled.View`
   align=items: center;
 `;
 
-export const Chat = () => {
-  const [text, setText] = useState('');
-  const [qnas, setQnas] = useState({});
+const STORAGE_KEY = '@VeganerQnas'
 
-  const [serverAnswer, setServerAnswer] = useState('');
+export const Chat = () => {
+  const [text, setText] = useState(''); //사용자 질문 저장
+  const [serverAnswer, setServerAnswer] = useState(''); //서버 답변 저장
+  const [qnas, setQnas] = useState({}); //qna 저장
 
   const onChangeText = (payload) => setText(payload);
   const onChangeServerAnswer = (payload) => setServerAnswer(payload);
+
+  useEffect(() => { //기간이 지난 것을 지움
+    const date = new Date();
+
+    return () => {
+
+    }
+  }, []); //처음 실행될 때
+
 
   const addQnas = () => {
     if (text === '') {
       return;
     }
-    const newQnas = { ...qnas, [Date.now()]: { text, isQ: true } };
+    const date = new Date();
+    const newQnas = { ...qnas, [date.getTime()]: { text, isQ: true, date: date.getDate() } };
+    //const newQnas = { ...qnas, [Date.now()]: { text, isQ: true } };
     setQnas(newQnas);
+    console.log(newQnas);
     setText('');
   }
 
@@ -35,10 +49,27 @@ export const Chat = () => {
     setServerAnswer('');
   }
 
-
-  const saveQnas = async (toSave) => {
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(toSave))
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem(STORAGE_KEY, jsonValue)
+    } catch (e) {
+      // saving error
+      alert(`An error has occurred ${error}`);
+    }
   }
+
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@storage_Key')
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      // error reading value
+    }
+  }
+
+
   const deleteAll = () => {
     const emptyQnas = {}
     setQnas(emptyQnas);
