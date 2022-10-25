@@ -12,11 +12,11 @@ const Container = styled.View`
 const STORAGE_KEY = '@VeganerQnas'
 
 export const Chat = () => {
-  const [text, setText] = useState(''); //사용자 질문 저장
+  const [question, setQuestion] = useState(''); //사용자 질문 저장
   const [serverAnswer, setServerAnswer] = useState(''); //서버 답변 저장
   const [qnas, setQnas] = useState({}); //qna 저장
 
-  const onChangeText = (payload) => setText(payload);
+  const onChangeQuestion = (payload) => setQuestion(payload);
   const onChangeServerAnswer = (payload) => setServerAnswer(payload);
 
   useEffect(() => { //기간이 지난 것을 지움
@@ -29,15 +29,15 @@ export const Chat = () => {
 
 
   const addQnas = () => {
-    if (text === '') {
+    if (question === '') {
       return;
     }
     const date = new Date();
-    const newQnas = { ...qnas, [date.getTime()]: { text, isQ: true, date: date.getDate() } };
-    //const newQnas = { ...qnas, [Date.now()]: { text, isQ: true } };
+    const newQnas = { ...qnas, [date.getTime()]: { question, isQ: true, date: date.getDate() } };
+    //const newQnas = { ...qnas, [Date.now()]: { question, isQ: true } };
     setQnas(newQnas);
     console.log(newQnas);
-    setText('');
+    setQuestion('');
   }
 
   const addAnswers = () => {
@@ -88,7 +88,7 @@ export const Chat = () => {
         {Object.keys(qnas).map(key =>
           qnas[key].isQ ? (
             <View style={styles.question} key={key}>
-              <Text style={styles.questionText}>{qnas[key].text}</Text>
+              <Text style={styles.questionText}>{qnas[key].question}</Text>
             </View>) : (<View style={styles.answer} key={key}>
               <Text style={styles.answerText}>{qnas[key].serverAnswer}</Text>
             </View>))}
@@ -98,8 +98,8 @@ export const Chat = () => {
       </TouchableOpacity>
       <TextInput
         placeholder='궁금한 게 있으신가요?'
-        value={text}
-        onChangeText={onChangeText}
+        value={question}
+        onChangeText={onChangeQuestion}
         onSubmitEditing={addQnas}
         style={styles.textinput}
       />
