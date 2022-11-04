@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import {View, Dimensions, StyleSheet, ImageBackground, Text} from 'react-native';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import {LocaleConfig} from 'react-native-calendars';
 import CalendarHeader from 'react-native-calendars/src/calendar/header';
 import Icon from 'react-native-vector-icons/AntDesign';
+import UploadModeModal from "../modal/CalenderModal";
 
 const Width = Dimensions.get('window').width;    //스크린 너비 초기화
 const Height = Dimensions.get('window').height;  //스크린 높이 초기화
@@ -82,7 +83,20 @@ export const CalenderApp = () => {
     }
   };
 
+    // 안드로이드를 위한 모달 visible 상태값
+    const [modalVisible, setModalVisible] = useState(false);
+  
+    // 선택 모달 오픈
+    const modalOpen = () => {
+      if (Platform.OS === "android") { // 안드로이드
+        setModalVisible(true); // visible = true
+      } else { // iOS
+        
+      }
+    }
+
     return(
+      <>
       <Container>
 
         <View style={styles.header}>
@@ -145,7 +159,7 @@ export const CalenderApp = () => {
             // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
             maxDate={'2030-12-31'}
             // Handler which gets executed on day press. Default = undefined
-            onDayPress={(day) => {setModalVisible(true);}}
+            onDayPress={modalOpen}
             // Handler which gets executed on day long press. Default = undefined
             onDayLongPress={(day) => {console.log('selected day', day)}}
             // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
@@ -186,8 +200,13 @@ export const CalenderApp = () => {
             //renderHeader={(date) => {/*Return JSX*/}}
           />
         </View>
-        
       </Container>
+
+      <UploadModeModal 
+        visible={modalVisible} 
+        onClose={() => setModalVisible(false)} />
+      </>
+      
 
     );
 };
