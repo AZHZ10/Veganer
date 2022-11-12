@@ -11,6 +11,7 @@ const Container = styled.View`
 `;
 
 const STORAGE_KEY = '@VeganerQnas'
+const SERVER_URL = 'http://18.176.51.235:5000/question';
 
 export const Chat = () => {
   const [question, setQuestion] = useState(''); //사용자 질문 저장
@@ -58,6 +59,8 @@ export const Chat = () => {
     const newQnas = { ...qnas, [date.getTime()]: { question, isQ: true, date: date.getDate() } };
     //const newQnas = { ...qnas, [Date.now()]: { question, isQ: true } };
     setQnas(newQnas);
+    getAnswer(question);
+    getHello();
     setQuestion('');
   }
 
@@ -65,15 +68,51 @@ export const Chat = () => {
     if (serverAnswer === '') {
       return;
     }
-    const date = new Date();
+    const date = new Date(); //server id를 위한 값
     const newQnas = { ...qnas, [date.getTime()]: { serverAnswer, isQ: false, date: date.getDate() } };
     setQnas(newQnas);
     setServerAnswer('');
   }
 
+  useEffect(() => {
+    addAnswers();
+  }, [serverAnswer]);
+
   const deleteAll = () => {
     const emptyQnas = {}
     setQnas(emptyQnas);
+  }
+
+  const getAnswer = async (question) => {
+    try {
+      const response = await fetch(SERVER_URL, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          text: question
+        })
+      });
+      const json = await response.json();
+      setServerAnswer(json.answer);
+      console.log(json.answer);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getHello = async () => {
+    console.log("실행~~~~~~~");
+    try {
+      const response = await fetch('http://18.176.51.235:5000/hello');
+      const data = await response.json();
+      console.log(data.result);
+    }
+    catch (error) {
+      console.log(error);
+    }
   }
 
   return (
