@@ -51,36 +51,29 @@ export const Chat = () => {
     console.log('run storeQnas');
   }, [qnas]);
 
-  const addQnas = () => {
+  useEffect(() => {
+    addAnswerToQnas();
+  }, [serverAnswer]);
+
+  const addQuestionToQnas = () => {
     if (question === '') {
       return;
     }
     const date = new Date();
     const newQnas = { ...qnas, [date.getTime()]: { question, isQ: true, date: date.getDate() } };
-    //const newQnas = { ...qnas, [Date.now()]: { question, isQ: true } };
     setQnas(newQnas);
     getAnswer(question);
-    getHello();
     setQuestion('');
   }
 
-  const addAnswers = () => {
+  const addAnswerToQnas = () => {
     if (serverAnswer === '') {
       return;
     }
-    const date = new Date(); //server id를 위한 값
+    const date = new Date();
     const newQnas = { ...qnas, [date.getTime()]: { serverAnswer, isQ: false, date: date.getDate() } };
     setQnas(newQnas);
     setServerAnswer('');
-  }
-
-  useEffect(() => {
-    addAnswers();
-  }, [serverAnswer]);
-
-  const deleteAll = () => {
-    const emptyQnas = {}
-    setQnas(emptyQnas);
   }
 
   const getAnswer = async (question) => {
@@ -103,12 +96,16 @@ export const Chat = () => {
     }
   }
 
+  const deleteAll = () => {
+    const emptyQnas = {}
+    setQnas(emptyQnas);
+  }
+
   const getHello = async () => {
-    console.log("실행~~~~~~~");
     try {
-      const response = await fetch('http://18.176.51.235:5000/hello');
+      const response = await fetch('http://18.176.51.235:5000/hello'); //public IP v4
       const data = await response.json();
-      console.log(data.result);
+      console.log(data);
     }
     catch (error) {
       console.log(error);
@@ -117,14 +114,6 @@ export const Chat = () => {
 
   return (
     <Container>
-
-      <TextInput
-        placeholder='서버 답변은 이렇게 할 예정'
-        value={serverAnswer}
-        onChangeText={onChangeServerAnswer}
-        onSubmitEditing={addAnswers}
-        style={styles.textinput}
-      />
       <ScrollView style={styles.chatContainer}>
         {Object.keys(qnas).map(key =>
           qnas[key].isQ ? (
@@ -148,7 +137,7 @@ export const Chat = () => {
         placeholder='궁금한 게 있으신가요?'
         value={question}
         onChangeText={onChangeQuestion}
-        onSubmitEditing={addQnas}
+        onSubmitEditing={addQuestionToQnas}
         style={styles.textinput}
       />
     </Container>
