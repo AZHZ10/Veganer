@@ -32,15 +32,13 @@ export const Chat = () => {
         console.log('initQnas error:', e);
       }
     }
-    const getStorageQnas = initQnas();
-    console.log(getStorageQnas);
   }, []); //처음 실행될 때
 
   useEffect(() => {
     const storeQnas = async (value) => {
       try {
         const jsonValue = JSON.stringify(value)
-        console.log('제이슨 밸류', value);
+        //console.log('저장되어 있는 리스트', value);
         await AsyncStorage.setItem(STORAGE_KEY, jsonValue)
       } catch (e) {
         // saving error
@@ -48,7 +46,6 @@ export const Chat = () => {
       }
     }
     storeQnas(qnas);
-    console.log('run storeQnas');
   }, [qnas]);
 
   useEffect(() => {
@@ -90,7 +87,6 @@ export const Chat = () => {
       });
       const json = await response.json();
       setServerAnswer(json.answer);
-      console.log(json.answer);
     } catch (error) {
       console.log(error);
     }
