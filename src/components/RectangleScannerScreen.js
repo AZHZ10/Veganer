@@ -136,7 +136,7 @@ export default class RectangleScannerScreen extends PureComponent {
 
     //api url 받아옴
     try{
-      const response = await axios.post('https://fg6hh1w44g.execute-api.us-east-1.amazonaws.com/veganerpost', fn);
+      const response = await axios.post('https://*******.execute-api.us-east-1.amazonaws.com/veganerpost', fn);
       this.setState({presignedUrl: response.data.body});
       console.log("----response url----");
       console.log(this.state.presignedUrl);
@@ -361,7 +361,6 @@ export default class RectangleScannerScreen extends PureComponent {
       <>
         <View style={styles.buttonBottomContainer}>
           <View style={{flex: 1, backgroundColor: 'green'}} />
-
           <View
             style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <View style={[styles.cameraOutline, disabledStyle]}>
@@ -383,7 +382,7 @@ export default class RectangleScannerScreen extends PureComponent {
                     //this.uploadImages();
                   }
                 }}>
-                <Text style={{color: 'black', fontSize: wp(4.5)}}>완료</Text>
+                <Text style={{color: 'black', fontSize: wp(4.5)}}></Text>
               </TouchableOpacity>
           </View>
         </View>
@@ -426,6 +425,8 @@ export default class RectangleScannerScreen extends PureComponent {
   }
 
 
+
+
   // letting the user know why camera use is not allowed
   renderCameraView() {
     if (this.state.showScannerView) {
@@ -443,7 +444,7 @@ export default class RectangleScannerScreen extends PureComponent {
         );
       }
 
-      // NOTE: I set the background color on here because for some reason the view doesn't line up correctly otherwise. It's a weird quirk I noticed.
+      // NOTE: I set the background color on here because for some reason the view doesn't line g correctly otherwise. It's a weird quirk I noticed.
       return (
         <View style={{ backgroundColor: 'rgba(0, 0, 0, 0)', position: 'relative', marginTop: previewSize.marginTop, marginLeft: previewSize.marginLeft, height: `${previewSize.height * 100}%`, width: `${previewSize.width * 100}%` }}>
           <Scanner
@@ -568,6 +569,7 @@ export default class RectangleScannerScreen extends PureComponent {
       top: 40,
     },
     cameraButton: {
+      
       backgroundColor: 'white',
       borderRadius: 50,
       flex: 1,
@@ -684,14 +686,5 @@ export default class RectangleScannerScreen extends PureComponent {
       backgroundColor: 'black',
       borderWidth: 1,
     },
-  
-    completebtn: {
-      margin: wp(5),
-      width: wp(15),
-      height: hp(3.5),
-      borderRadius: 30,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'white',
-    },
+
   });      
