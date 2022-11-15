@@ -1,8 +1,17 @@
 import { PropTypes } from 'prop-types';
-import React, { PureComponent } from 'react';
+import React, { PureComponent, useEffect } from 'react';
 import { ActivityIndicator, Animated, Dimensions, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Scanner, { Filters, RectangleOverlay } from 'react-native-rectangle-scanner';
+import { AlexaForBusiness, FSx } from 'aws-sdk';
+import axios from "axios";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen'; 
+import { thisTypeAnnotation } from '@babel/types';
+
+
 
 export default class RectangleScannerScreen extends PureComponent {
   static propTypes = {
@@ -41,6 +50,7 @@ export default class RectangleScannerScreen extends PureComponent {
       loadingCamera: true,
       processingImage: false,
       takingPicture: false,
+      feedbackState: false,
       overlayFlashOpacity: new Animated.Value(0),
       device: {
         initialized: false,
@@ -50,6 +60,10 @@ export default class RectangleScannerScreen extends PureComponent {
         previewHeightPercent: 1,
         previewWidthPercent: 1,
       },
+      currentImage: '',
+      menuImages: [],
+      s3Link: '',
+      //presignedUrl: ''
     };
 
     this.camera = React.createRef();
@@ -108,6 +122,47 @@ export default class RectangleScannerScreen extends PureComponent {
   componentWillUnmount() {
     clearTimeout(this.imageProcessorTimeout);
   }
+
+  //이미지 업로드
+  uploadImages = async() =>{
+    const fd = new FormData();
+    const presignedUrl = '';
+
+    console.log('----start upload images----');
+   // const newFile = new File([this.state.currentImage], 'menuImage.png', {type: "image/png"});
+    const fn = JSON.stringify({filename: 'menuImage.png'});
+    console.log(fn);
+    console.log("---get url---");
+
+    //api url 받아옴
+    try{
+      const response = await axios.post('https://fg6hh1w44g.execute-api.us-east-1.amazonaws.com/veganerpost', fn);
+      this.setState({presignedUrl: response.data.body});
+      console.log("----response url----");
+      console.log(this.state.presignedUrl);
+    }catch(err){
+      console.log(err);
+    }
+    //file format관련
+
+  const file = {
+   "uri": this.state.currentImage
+  }
+    try{
+     const response = await fetch(this.state.presignedUrl, {
+      method: "PUT",
+      body: file,
+     });
+    }
+    catch(err){
+      console.log(err);
+    }
+
+   this.props.navigation.navigate('MenuResult', {
+     menuImages: this.state.presignedUrl,
+   });
+  }
+
 
   // Called after the device gets setup. This lets you know some platform specifics
   // like if the device has a camera or flash, or even if you have permission to use the
@@ -203,13 +258,18 @@ export default class RectangleScannerScreen extends PureComponent {
   }
 
   // The picture was taken and cached. You can now go on to using it.
-  onPictureProcessed = (event) => {
-    this.props.onPictureProcessed(event);
+  onPictureProcessed = ({croppedImage, initialImage}) => {
+    //this.props.onPictureProcessed(event);
+    console.log(initialImage);
+    console.log(croppedImage);
     this.setState({
       takingPicture: false,
-      processingImage: false,
+      processingImage: true,
       showScannerView: this.props.cameraIsOn || false,
+      currentImage: croppedImage,
     });
+    //console.log(this.state.currentImage);
+    this.uploadImages();
   }
 
   // Flashes the screen on capture
@@ -315,17 +375,16 @@ export default class RectangleScannerScreen extends PureComponent {
 
           <View
             style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}}>
-            {this.state.isScanned && (
               <TouchableOpacity
                 style={styles.completebtn}
                 onPress={() => {
                   {
-                    this.postImages();
+                    //console.log('on press -> upload images')
+                    //this.uploadImages();
                   }
                 }}>
                 <Text style={{color: 'black', fontSize: wp(4.5)}}>완료</Text>
               </TouchableOpacity>
-            )}
           </View>
         </View>
       </>
@@ -349,7 +408,7 @@ export default class RectangleScannerScreen extends PureComponent {
           <View style={styles.loadingContainer}>
             <View style={styles.processingContainer}>
               <ActivityIndicator color="#333333" size="large" />
-              <Text style={{ color: '#333333', fontSize: 30, marginTop: 10 }}>Processing</Text>
+              <Text style={{ color: '#333333', fontSize: 20, marginTop: 10 }}>읽는 중</Text>
             </View>
           </View>
         </View>
@@ -365,8 +424,6 @@ export default class RectangleScannerScreen extends PureComponent {
       </>
     );
   }
-
-
 
 
   // letting the user know why camera use is not allowed
@@ -574,5 +631,67 @@ export default class RectangleScannerScreen extends PureComponent {
    },
     scanner: {
       flex: 1,
+    },
+
+    
+    //수정하기
+
+    btnContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingBottom: hp(1.5),
+  
+      ...Platform.select({
+        ios: {
+          paddingBottom: hp(4.5),
+        },
+      }),
+    },
+    btnArea_l: {
+      // backgroundColor: 'orange',
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'flex-end',
+    },
+    btnArea_r: {
+      // backgroundColor: 'blue',
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      // marginRight: wp(10),
+    },
+  
+    delbtnoutline: {
+      margin: wp(6),
+      marginRight: wp(2),
+      width: wp(42),
+      height: hp(5),
+      borderRadius: 30,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'white',
+      borderWidth: 1,
+    },
+    delbtn: {
+      margin: wp(6),
+      marginLeft: wp(2),
+      width: wp(42),
+      height: hp(5),
+      borderRadius: 30,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'black',
+      borderWidth: 1,
+    },
+  
+    completebtn: {
+      margin: wp(5),
+      width: wp(15),
+      height: hp(3.5),
+      borderRadius: 30,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'white',
     },
   });      
