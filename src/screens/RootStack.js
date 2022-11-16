@@ -51,8 +51,8 @@ const CameraStackScreen = () => {
         <CameraStack.Screen 
           name = 'RectangleScanner'
           options={({navigation, route}) => ({
-            headerShown: true,
-            headerTransparent: true,
+            headerShown: false,
+            headerTransparent: false,
             headerTitle: '',
           })}
           component = {RectangleScannerScreen} />
@@ -60,8 +60,12 @@ const CameraStackScreen = () => {
           name = 'MenuResult'
           options={({navigation, route}) => ({
             headerShown: true,
-            headerTransparent: true,
-            headerTitle: '',
+            headerTransparent: false,
+            headerTitle: '메뉴 정보',
+            headerTitleStyle: {
+              fontWeight: "normal",
+              fontSize: 16
+            }
           })}
           component = {MenuResultScreen} />
       </Stack.Navigator>
