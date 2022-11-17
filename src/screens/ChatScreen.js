@@ -11,7 +11,7 @@ const Container = styled.View`
 `;
 
 const STORAGE_KEY = '@VeganerQnas'
-const SERVER_URL = 'http://18.176.51.235:5000/question';
+const SERVER_URL = 'http://35.74.65.77:5000/question';
 
 export const Chat = () => {
   const [question, setQuestion] = useState(''); //사용자 질문 저장
@@ -19,7 +19,6 @@ export const Chat = () => {
   const [qnas, setQnas] = useState({}); //qna 저장
 
   const onChangeQuestion = (payload) => setQuestion(payload);
-  const onChangeServerAnswer = (payload) => setServerAnswer(payload);
 
   useEffect(() => { //기간이 지난 것을 지움
     const initQnas = async () => {
@@ -32,6 +31,7 @@ export const Chat = () => {
         console.log('initQnas error:', e);
       }
     }
+    initQnas();
   }, []); //처음 실행될 때
 
   useEffect(() => {
@@ -99,7 +99,7 @@ export const Chat = () => {
 
   const getHello = async () => {
     try {
-      const response = await fetch('http://18.176.51.235:5000/hello'); //public IP v4
+      const response = await fetch('http://43.206.162.24:5000/hello'); //public IP v4
       const data = await response.json();
       console.log(data);
     }
@@ -126,9 +126,9 @@ export const Chat = () => {
               </View>
             </View>))}
       </ScrollView>
-      <TouchableOpacity onPress={deleteAll}>
+      {/* {<TouchableOpacity onPress={deleteAll}>
         <Text style={styles.deleteBtn}>delete All</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>} */}
       <TextInput
         placeholder='궁금한 게 있으신가요?'
         value={question}
