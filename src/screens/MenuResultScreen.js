@@ -2,14 +2,15 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, useLayoutEffect, SafeAreaView, FlatList} from 'react-native';
 import {useState} from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {menu, info} from '../screens/menuConstants'
-import Loader from '../components/loadingComponent'
+import {menu, info} from '../screens/menuConstants';
+import Loader from '../components/loadingComponent';
 //이미지
-import warnImg from "../screens/images/warning.png"
-import nonImg from "../screens/images/non.png"
+import warnImg from "../screens/images/warning.png";
+import nonImg from "../screens/images/non.png";
 import { tan } from 'react-native-reanimated';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-const MenuResultScreen = () => {;
+const MenuResultScreen = () => {
     const [loading] = useState(false);
     //json code -> 추후에 서버랑 연결하고 코드 변경할 예정
     const markResultItems = ({item, index}) => {

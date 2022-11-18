@@ -1,7 +1,7 @@
 import React from "react";
-import {createStackNavigator} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import TabNavigation from "./TabScreen";
-import {Chat} from "../screens/ChatScreen";
+import { Chat } from "../screens/ChatScreen";
 
 // import CameraStackScreen from "./CameraStack";
 import RectangleScannerScreen from "../components/RectangleScannerScreen";
@@ -11,38 +11,38 @@ const Stack = createStackNavigator();
 const CameraStack = createStackNavigator();
 const ChatStack = createStackNavigator();
 
-function RootStack(){
-    return(
-        <Stack.Navigator>
-          <Stack.Screen
-            name = "BottomTab"
-            component = {TabNavigation}
-            options={({navigation, route}) => ({
-                headerShown: false,
-              })}
-           />
-           <Stack.Screen
-            name = "CameraScreens"
-            component = {CameraStackScreen}
-            options={({navigation, route}) => ({
-                headerShown: false,
-              })}
-           /> 
-           <Stack.Screen
-            name = "ChatScreen"
-            component = {ChatStackScreen}
-            options = {({navigation, route}) => ({
-              headerShown: true,
-              headerTitleAlign: "center",
-              headerTitleStyle: {
-                fontSize: 15
-              },
-              headerTitle: "챗봇 이름",
-            })}
-           />           
+function RootStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="BottomTab"
+        component={TabNavigation}
+        options={({ navigation, route }) => ({
+          headerShown: false,
+        })}
+      />
+      <Stack.Screen
+        name="CameraScreens"
+        component={CameraStackScreen}
+        options={({ navigation, route }) => ({
+          headerShown: false,
+        })}
+      />
+      <Stack.Screen
+        name="ChatScreen"
+        component={ChatStackScreen}
+        options={({ navigation, route }) => ({
+          headerShown: true,
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontSize: 15
+          },
+          headerTitle: "Veganee",
+        })}
+      />
 
-        </Stack.Navigator>
-    )
+    </Stack.Navigator>
+  )
 }
 
 const CameraStackScreen = () => {
@@ -51,8 +51,8 @@ const CameraStackScreen = () => {
         <CameraStack.Screen 
           name = 'RectangleScanner'
           options={({navigation, route}) => ({
-            headerShown: false,
-            headerTransparent: false,
+            headerShown: true,
+            headerTransparent: true,
             headerTitle: '',
           })}
           component = {RectangleScannerScreen} />
@@ -72,20 +72,20 @@ const CameraStackScreen = () => {
     )
   }
 
-  const ChatStackScreen = () => {
-    return(
-      <Stack.Navigator>
-        <ChatStack.Screen 
-          name = "Chat" 
-          component={Chat}
-          options = {(navigation, route)=> ({
-            headerShown: false,
-            headerTitle: '',
-            tabBarStyle: {display: 'none'},
-          })}
-           />
-      </Stack.Navigator>
-    );
-  };
+const ChatStackScreen = () => {
+  return (
+    <Stack.Navigator>
+      <ChatStack.Screen
+        name="Chat"
+        component={Chat}
+        options={(navigation, route) => ({
+          headerShown: false,
+          headerTitle: '',
+          tabBarStyle: { display: 'none' },
+        })}
+      />
+    </Stack.Navigator>
+  );
+};
 
 export default RootStack;
