@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, SafeAreaView, FlatList } from 'react-native';
 import styled from 'styled-components/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AutoHeightImage from 'react-native-auto-height-image';
@@ -11,14 +11,20 @@ const Container = styled.View`
 `;
 
 const STORAGE_KEY = '@VeganerQnas'
-const SERVER_URL = 'http://35.74.65.77:5000/question';
+const SERVER_URL = 'http://35.77.61.62:5000/question';
 
 export const Chat = () => {
   const [question, setQuestion] = useState(''); //사용자 질문 저장
   const [serverAnswer, setServerAnswer] = useState(''); //서버 답변 저장
   const [qnas, setQnas] = useState({}); //qna 저장
-
   const onChangeQuestion = (payload) => setQuestion(payload);
+
+  useEffect(() => {
+    if (Object.keys(qnas).length === 0) {
+      setServerAnswer("안녕하세요!");
+    }
+    console.log("qnas", qnas);
+  }, []);
 
   useEffect(() => { //기간이 지난 것을 지움
     const initQnas = async () => {
@@ -38,7 +44,7 @@ export const Chat = () => {
     const storeQnas = async (value) => {
       try {
         const jsonValue = JSON.stringify(value)
-        //console.log('저장되어 있는 리스트', value);
+        console.log('저장되어 있는 리스트', value);
         await AsyncStorage.setItem(STORAGE_KEY, jsonValue)
       } catch (e) {
         // saving error
@@ -108,6 +114,24 @@ export const Chat = () => {
     }
   }
 
+  const renderItem = (qna) => {
+    return (
+      qna.isQ ? (
+        <View style={styles.question}>
+          <Text style={styles.questionText}>{qna.question}</Text>
+        </View>) : (
+        <View style={styles.answerWithChar}>
+          <AutoHeightImage
+            width={60}
+            source={require('./Veganee.png')}
+          />
+          <View style={styles.answer}>
+            <Text style={styles.answerText}>{qna.serverAnswer}</Text>
+          </View>
+        </View>)
+    );
+  };
+
   return (
     <Container>
       <ScrollView style={styles.chatContainer}>
@@ -126,9 +150,16 @@ export const Chat = () => {
               </View>
             </View>))}
       </ScrollView>
-      {/* {<TouchableOpacity onPress={deleteAll}>
+      {/*<SafeAreaView style={styles.container}>
+        <FlatList
+          data={Object.values(qnas)}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => String(Object.keys(qnas)[index])}
+        />
+            </SafeAreaView>*/}
+      {<TouchableOpacity onPress={deleteAll}>
         <Text style={styles.deleteBtn}>delete All</Text>
-      </TouchableOpacity>} */}
+      </TouchableOpacity>}
       <TextInput
         placeholder='궁금한 게 있으신가요?'
         value={question}
