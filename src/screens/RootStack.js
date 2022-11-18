@@ -46,27 +46,31 @@ function RootStack() {
 }
 
 const CameraStackScreen = () => {
-  return (
-    <Stack.Navigator>
-      <CameraStack.Screen
-        name='RectangleScanner'
-        options={({ navigation, route }) => ({
-          headerShown: true,
-          headerTransparent: true,
-          headerTitle: '',
-        })}
-        component={RectangleScannerScreen} />
-      <CameraStack.Screen
-        name='MenuResult'
-        options={({ navigation, route }) => ({
-          headerShown: true,
-          headerTransparent: true,
-          headerTitle: '',
-        })}
-        component={MenuResultScreen} />
-    </Stack.Navigator>
-  )
-}
+    return(
+      <Stack.Navigator>
+        <CameraStack.Screen 
+          name = 'RectangleScanner'
+          options={({navigation, route}) => ({
+            headerShown: true,
+            headerTransparent: true,
+            headerTitle: '',
+          })}
+          component = {RectangleScannerScreen} />
+        <CameraStack.Screen 
+          name = 'MenuResult'
+          options={({navigation, route}) => ({
+            headerShown: true,
+            headerTransparent: false,
+            headerTitle: '메뉴 정보',
+            headerTitleStyle: {
+              fontWeight: "normal",
+              fontSize: 16
+            }
+          })}
+          component = {MenuResultScreen} />
+      </Stack.Navigator>
+    )
+  }
 
 const ChatStackScreen = () => {
   return (
