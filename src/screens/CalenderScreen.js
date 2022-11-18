@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import {View, Dimensions, StyleSheet, ImageBackground, Text} from 'react-native';
-import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
-import {LocaleConfig} from 'react-native-calendars';
+import { View, Dimensions, StyleSheet, ImageBackground, Text } from 'react-native';
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { LocaleConfig } from 'react-native-calendars';
 import CalendarHeader from 'react-native-calendars/src/calendar/header';
 import Icon from 'react-native-vector-icons/AntDesign';
 import UploadModeModal from "../modal/CalenderModal";
@@ -16,36 +16,36 @@ const Container = styled.View`
 `;
 
 LocaleConfig.locales['fr'] = {
-  monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-  monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
-  dayNames: ['일요일','월요일', '화요일','수요일','목요일','금요일','토요일'],
-  dayNamesShort: ['일', '월','화','수','목','금','토'],
+  monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+  monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+  dayNames: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
   today: 'Aujourd\'hui'
 };
 LocaleConfig.defaultLocale = 'fr';
 
 const styles = StyleSheet.create({
-    header : {
-      flex : 1.15
-    },
-    headerTextView : {
-      padding : 30
-    },
-    headerText : {
-      fontSize : 25,
-      color:'white',
-    },
-    calendar : {
-      flex : 5,
-      backgroundColor: 'white',
-      padding : 1
-    },
-    bgImage : {
-      width : '100%', height : '100%',
-      flexDirection : 'row',
-      alignItems : 'center',
-      justifyContent : 'flex-end',
-    }
+  header: {
+    flex: 1.15
+  },
+  headerTextView: {
+    padding: 30
+  },
+  headerText: {
+    fontSize: 25,
+    color: 'white',
+  },
+  calendar: {
+    flex: 5,
+    backgroundColor: 'white',
+    padding: 1
+  },
+  bgImage: {
+    width: '100%', height: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  }
 
 
 })
@@ -83,24 +83,24 @@ export const CalenderApp = () => {
     }
   };
 
-    // 안드로이드를 위한 모달 visible 상태값
-    const [modalVisible, setModalVisible] = useState(false);
-  
-    // 선택 모달 오픈
-    const modalOpen = () => {
-      if (Platform.OS === "android") { // 안드로이드
-        setModalVisible(true); // visible = true
-      } else { // iOS
-        
-      }
-    }
+  // 안드로이드를 위한 모달 visible 상태값
+  const [modalVisible, setModalVisible] = useState(false);
 
-    return(
-      <>
+  // 선택 모달 오픈
+  const modalOpen = () => {
+    if (Platform.OS === "android") { // 안드로이드
+      setModalVisible(true); // visible = true
+    } else { // iOS
+
+    }
+  }
+
+  return (
+    <>
       <Container>
 
         <View style={styles.header}>
-          <ImageBackground source={require('../screens/hd-wallpaper-176722.jpg')} style={styles.bgImage}>
+          <ImageBackground source={require('./cal-img1.jpg')} style={styles.bgImage}>
             <View style={styles.headerTextView}>
               <Text style={styles.headerText}>페스코 베지테리언</Text>
               <Text style={styles.headerText}>686일째</Text>
@@ -108,15 +108,15 @@ export const CalenderApp = () => {
           </ImageBackground>
         </View>
 
-        <View style={ styles.calendar }>
-          <Calendar 
+        <View style={styles.calendar}>
+          <Calendar
             markingType={'custom'}
-            markedDates={markedDates}         
-            
+            markedDates={markedDates}
+
             theme={{
-              'stylesheet.day.basic':{
-                'base':{
-                  width : 30, 
+              'stylesheet.day.basic': {
+                'base': {
+                  width: 30,
                   height: 73
                 }
               },
@@ -153,7 +153,7 @@ export const CalenderApp = () => {
 
 
             // Initially visible month. Default = Date()
-            current={ Date() }
+            current={Date()}
             // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
             minDate={'2020-01-01'}
             // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
@@ -161,19 +161,19 @@ export const CalenderApp = () => {
             // Handler which gets executed on day press. Default = undefined
             onDayPress={modalOpen}
             // Handler which gets executed on day long press. Default = undefined
-            onDayLongPress={(day) => {console.log('selected day', day)}}
+            onDayLongPress={(day) => { console.log('selected day', day) }}
             // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
             monthFormat={'yyyy MM'}
             // Handler which gets executed when visible month changes in calendar. Default = undefined
-            onMonthChange={(month) => {console.log('month changed', month)}}
+            onMonthChange={(month) => { console.log('month changed', month) }}
             // Hide month navigation arrows. Default = false
             hideArrows={false}
             // Replace default arrows with custom ones (direction can be 'left' or 'right')
             renderArrow={(direction) => direction === "left" ? (
               <Icon name="caretleft" size={20} color="#81CC7E" />
-                ) : (
+            ) : (
               <Icon name="caretright" size={20} color="#81CC7E" />
-                )
+            )
             }
             // Do not show days of other months in month page. Default = false
             hideExtraDays={true}
@@ -196,17 +196,17 @@ export const CalenderApp = () => {
             disableArrowRight={false}
             // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
             disableAllTouchEventsForDisabledDays={true}
-            /** Replace default month and year title with custom one. the function receive a date as parameter. */
-            //renderHeader={(date) => {/*Return JSX*/}}
+          /** Replace default month and year title with custom one. the function receive a date as parameter. */
+          //renderHeader={(date) => {/*Return JSX*/}}
           />
         </View>
       </Container>
 
-      <UploadModeModal 
-        visible={modalVisible} 
+      <UploadModeModal
+        visible={modalVisible}
         onClose={() => setModalVisible(false)} />
-      </>
-      
+    </>
 
-    );
+
+  );
 };
