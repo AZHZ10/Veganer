@@ -6,6 +6,7 @@ import { LocaleConfig } from 'react-native-calendars';
 import CalendarHeader from 'react-native-calendars/src/calendar/header';
 import Icon from 'react-native-vector-icons/AntDesign';
 import UploadModeModal from "../modal/CalenderModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Width = Dimensions.get('window').width;    //스크린 너비 초기화
 const Height = Dimensions.get('window').height;  //스크린 높이 초기화
@@ -58,13 +59,19 @@ const styles = StyleSheet.create({
   },
   selectBtnContainer: {
     flex: 1,
+    alignContent: "center",
+    justifyContent: "center",
     flexDirection: "row",
     flexWrap: "wrap",
     position: "absolute",
+    top: 70,
+    left: 40,
+    zIndex: 3,
     width: "80%",
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderColor: '#60BF81',
-
+    borderRadius: 20,
+    paddingVertical: 10,
   }
 
 })
@@ -115,17 +122,21 @@ export const CalenderApp = () => {
   }
 
   const [displaySelectStep, setDisplaySelectStep] = useState(false);
-  const selectMyStep = () => {
+  const [myStep, setMyStep] = useState("비건");
+  const displaytMyStep = () => {
     displaySelectStep ? setDisplaySelectStep(false) : setDisplaySelectStep(true);
-    console.log(displaySelectStep);
+  }
+  const selectMyStep = (event) => {
+    setMyStep(event._targetInst.child.memoizedProps);
+    setDisplaySelectStep(false);
   }
   const MyStepList = ["폴로", "페스코", "락토-오보", "락토", "오보", "비건", "플렉시"];
   const MyStepView = () => {
     return (
       <View style={styles.selectBtnContainer}>
         {MyStepList.map(item =>
-          <TouchableOpacity>
-            <Text style={styles.selectBtn}>{item}</Text>
+          <TouchableOpacity >
+            <Text style={styles.selectBtn} onPress={selectMyStep}>{item}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -139,15 +150,15 @@ export const CalenderApp = () => {
         <View style={styles.header}>
           <ImageBackground source={require('./cal-img1.jpg')} style={styles.bgImage}>
             <View style={styles.headerTextView}>
-              <TouchableOpacity onPress={selectMyStep}>
-                <Text style={styles.headerText}>페스코 베지테리언</Text>
+              <TouchableOpacity onPress={displaytMyStep}>
+                <Text style={styles.headerText}>{myStep} 베지테리언</Text>
               </TouchableOpacity>
               <Text style={styles.headerText}>686일째</Text>
             </View>
           </ImageBackground>
         </View>
 
-        {<MyStepView />}
+        {displaySelectStep && <MyStepView />}
 
         <View style={styles.calendar}>
           <Calendar
