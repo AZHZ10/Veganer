@@ -275,10 +275,10 @@ export default class RectangleScannerScreen extends PureComponent {
   // Flashes the screen on capture
   triggerSnapAnimation() {
     Animated.sequence([
-      Animated.timing(this.state.overlayFlashOpacity, { toValue: 0.2, duration: 100 }),
-      Animated.timing(this.state.overlayFlashOpacity, { toValue: 0, duration: 50 }),
-      Animated.timing(this.state.overlayFlashOpacity, { toValue: 0.6, delay: 100, duration: 120 }),
-      Animated.timing(this.state.overlayFlashOpacity, { toValue: 0, duration: 90 }),
+      Animated.timing(this.state.overlayFlashOpacity, { toValue: 0.2, duration: 100,  useNativeDriver: true }),
+      Animated.timing(this.state.overlayFlashOpacity, { toValue: 0, duration: 50,  useNativeDriver: true }),
+      Animated.timing(this.state.overlayFlashOpacity, { toValue: 0.6, delay: 100, duration: 120,  useNativeDriver: true}),
+      Animated.timing(this.state.overlayFlashOpacity, { toValue: 0, duration: 90,  useNativeDriver: true}),
     ]).start();
   }
 
