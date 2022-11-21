@@ -149,9 +149,10 @@ export const CalenderApp = () => {
   useEffect(() => {
     const initCalendar = async () => {
       try {
-        const jsonValue = await AsyncStorage.getItem(VEG_STEP_STORAGE_KEY)
-        setMyStep(JSON.parse(jsonValue));
-        return jsonValue != null ? JSON.parse(jsonValue) : {};
+        const vegStepValue = await AsyncStorage.getItem(VEG_STEP_STORAGE_KEY)
+        setMyStep(JSON.parse(vegStepValue));
+        console.log(vegStepValue);
+        //밑으로 불러오는 거 작성
       } catch (e) {
         console.log('initCalendar error:', e);
       }
@@ -159,11 +160,11 @@ export const CalenderApp = () => {
     initCalendar();
   }, []);
 
-  const storeLocalStorage = async (value, storageKey) => {
+  const storeLocalStorage = async (storageKey, value) => {//첫 번째 인자를 키, 두 번째 인자를 값으로 함수 사용
     try {
-      const jsonValue = JSON.stringify(value)
-      console.log(`key: ${storageKey}, 저장된 값:`, value);
-      await AsyncStorage.setItem(storageKey, jsonValue)
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem(storageKey, jsonValue);
+      console.log(`key: ${storageKey}, 저장된 값:`, jsonValue);
     } catch (e) {
       alert(`An error has occurred ${error}`);
     }
