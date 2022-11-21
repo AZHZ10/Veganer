@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { View, Dimensions, StyleSheet, ImageBackground, Text, TouchableOpacity } from 'react-native';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
@@ -10,6 +10,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Width = Dimensions.get('window').width;    //스크린 너비 초기화
 const Height = Dimensions.get('window').height;  //스크린 높이 초기화
+const VEG_STEP_STORAGE_KEY = '@VegetarianismStep';
 
 // 이 부분 필요한지 검토
 const Container = styled.View`
@@ -122,12 +123,14 @@ export const CalenderApp = () => {
   }
 
   const [displaySelectStep, setDisplaySelectStep] = useState(false);
-  const [myStep, setMyStep] = useState("비건");
+  const [myStep, setMyStep] = useState("");
   const displaytMyStep = () => {
     displaySelectStep ? setDisplaySelectStep(false) : setDisplaySelectStep(true);
   }
   const selectMyStep = (event) => {
-    setMyStep(event._targetInst.child.memoizedProps);
+    const selectedStep = event._targetInst.child.memoizedProps
+    setMyStep(selectedStep);
+    storeLocalStorage(VEG_STEP_STORAGE_KEY, selectedStep);
     setDisplaySelectStep(false);
   }
   const MyStepList = ["폴로", "페스코", "락토-오보", "락토", "오보", "비건", "플렉시"];
@@ -141,6 +144,29 @@ export const CalenderApp = () => {
         )}
       </View>
     )
+  }
+
+  useEffect(() => {
+    const initCalendar = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem(VEG_STEP_STORAGE_KEY)
+        setMyStep(JSON.parse(jsonValue));
+        return jsonValue != null ? JSON.parse(jsonValue) : {};
+      } catch (e) {
+        console.log('initCalendar error:', e);
+      }
+    }
+    initCalendar();
+  }, []);
+
+  const storeLocalStorage = async (value, storageKey) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      console.log(`key: ${storageKey}, 저장된 값:`, value);
+      await AsyncStorage.setItem(storageKey, jsonValue)
+    } catch (e) {
+      alert(`An error has occurred ${error}`);
+    }
   }
 
   return (
