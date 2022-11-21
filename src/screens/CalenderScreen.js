@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { View, Dimensions, StyleSheet, ImageBackground, Text } from 'react-native';
+import { View, Dimensions, StyleSheet, ImageBackground, Text, TouchableOpacity } from 'react-native';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import CalendarHeader from 'react-native-calendars/src/calendar/header';
 import Icon from 'react-native-vector-icons/AntDesign';
 import UploadModeModal from "../modal/CalenderModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Width = Dimensions.get('window').width;    //스크린 너비 초기화
 const Height = Dimensions.get('window').height;  //스크린 높이 초기화
+const VEG_STEP_STORAGE_KEY = '@VegetarianismStep';
 
 // 이 부분 필요한지 검토
 const Container = styled.View`
@@ -45,8 +47,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
+  },
+  selectBtn: {
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderColor: '#60BF81',
+    borderWidth: 1,
+    borderRadius: 10,
+    width: 70,
+    padding: 5,
+    textAlign: 'center',
+    margin: 10
+  },
+  selectBtnContainer: {
+    flex: 1,
+    alignContent: "center",
+    justifyContent: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    position: "absolute",
+    top: 70,
+    left: 40,
+    zIndex: 3,
+    width: "80%",
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    borderColor: '#60BF81',
+    borderRadius: 20,
+    paddingVertical: 10,
   }
-
 
 })
 
@@ -95,6 +122,54 @@ export const CalenderApp = () => {
     }
   }
 
+  const [displaySelectStep, setDisplaySelectStep] = useState(false);
+  const [myStep, setMyStep] = useState("");
+  const displaytMyStep = () => {
+    displaySelectStep ? setDisplaySelectStep(false) : setDisplaySelectStep(true);
+  }
+  const selectMyStep = (event) => {
+    const selectedStep = event._targetInst.child.memoizedProps
+    setMyStep(selectedStep);
+    storeLocalStorage(VEG_STEP_STORAGE_KEY, selectedStep);
+    setDisplaySelectStep(false);
+  }
+  const MyStepList = ["폴로", "페스코", "락토-오보", "락토", "오보", "비건", "플렉시"];
+  const MyStepView = () => {
+    return (
+      <View style={styles.selectBtnContainer}>
+        {MyStepList.map(item =>
+          <TouchableOpacity >
+            <Text style={styles.selectBtn} onPress={selectMyStep}>{item}</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+    )
+  }
+
+  useEffect(() => {
+    const initCalendar = async () => {
+      try {
+        const vegStepValue = await AsyncStorage.getItem(VEG_STEP_STORAGE_KEY)
+        setMyStep(JSON.parse(vegStepValue));
+        console.log(vegStepValue);
+        //밑으로 불러오는 거 작성
+      } catch (e) {
+        console.log('initCalendar error:', e);
+      }
+    }
+    initCalendar();
+  }, []);
+
+  const storeLocalStorage = async (storageKey, value) => {//첫 번째 인자를 키, 두 번째 인자를 값으로 함수 사용
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem(storageKey, jsonValue);
+      console.log(`key: ${storageKey}, 저장된 값:`, jsonValue);
+    } catch (e) {
+      alert(`An error has occurred ${error}`);
+    }
+  }
+
   return (
     <>
       <Container>
@@ -102,11 +177,15 @@ export const CalenderApp = () => {
         <View style={styles.header}>
           <ImageBackground source={require('./cal-img1.jpg')} style={styles.bgImage}>
             <View style={styles.headerTextView}>
-              <Text style={styles.headerText}>페스코 베지테리언</Text>
+              <TouchableOpacity onPress={displaytMyStep}>
+                <Text style={styles.headerText}>{myStep} 베지테리언</Text>
+              </TouchableOpacity>
               <Text style={styles.headerText}>686일째</Text>
             </View>
           </ImageBackground>
         </View>
+
+        {displaySelectStep && <MyStepView />}
 
         <View style={styles.calendar}>
           <Calendar

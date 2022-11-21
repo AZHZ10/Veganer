@@ -6,3 +6,8 @@
 7. VS code에서 `npm run android`
     
     `react-native run-android`
+adb devices
+adb reverse tcp:8081 tcp:8081
+npm run android
+
+git remote add upstream https://github.com/AZHZ10/Veganer.git
