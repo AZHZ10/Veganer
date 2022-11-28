@@ -17,6 +17,12 @@ const Container = styled.View`
   flex: 1;
 `;
 
+// 채식 날짜 계산
+const today = new Date(); // 오늘
+const startDay = new Date("2022-08-31");
+const diff = today-startDay;
+var currDay = 24 * 60 * 60 * 1000;
+const daynum = parseInt(diff/currDay)
 LocaleConfig.locales['fr'] = {
   monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
   monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
@@ -80,34 +86,138 @@ const styles = StyleSheet.create({
 export const CalenderApp = () => {
 
   const markedDates = {
-    '2022-09-15': {
+    '2022-11-01': {
+      customStyles: {
+        container: {
+          backgroundColor: '#BCE8C5'
+        },
+      }
+    },
+
+    '2022-11-03': {
       customStyles: {
         container: {
           backgroundColor: '#8FD99F'
         },
       }
     },
-    '2022-10-09': {
-      customStyles: {
-        container: {
-          backgroundColor: '#8FD99F'
-        },
-      }
-    },
-    '2022-10-10': {
+
+    '2022-11-04': {
       customStyles: {
         container: {
           backgroundColor: '#BCE8C5',
         },
       }
     },
-    '2022-10-31': {
+
+    '2022-11-05': {
       customStyles: {
         container: {
           backgroundColor: '#8FD99F'
         },
       }
-    }
+    },
+
+    '2022-11-06': {
+      customStyles: {
+        container: {
+          backgroundColor: '#BCE8C5',
+        },
+      }
+    },
+
+    '2022-11-08': {
+      customStyles: {
+        container: {
+          backgroundColor: '#E0F4E4'
+        },
+      }
+    },
+    '2022-11-09': {
+      customStyles: {
+        container: {
+          backgroundColor: '#8FD99F'
+        },
+      }
+    },
+    '2022-11-10': {
+      customStyles: {
+        container: {
+          backgroundColor: '#BCE8C5',
+        },
+      }
+    },
+    '2022-11-12': {
+      customStyles: {
+        container: {
+          backgroundColor: '#E0F4E4'
+        },
+      }
+    },
+    '2022-11-13': {
+      customStyles: {
+        container: {
+          backgroundColor: '#8FD99F'
+        },
+      }
+    },
+    '2022-11-14': {
+      customStyles: {
+        container: {
+          backgroundColor: '#E0F4E4'
+        },
+      }
+    },
+    '2022-11-15': {
+      customStyles: {
+        container: {
+          backgroundColor: '#BCE8C5'
+        },
+      }
+    },
+    '2022-11-17': {
+      customStyles: {
+        container: {
+          backgroundColor: '#BCE8C5'
+        },
+      }
+    },
+    '2022-11-18': {
+      customStyles: {
+        container: {
+          backgroundColor: '#8FD99F',
+        },
+      }
+    },
+    '2022-11-20': {
+      customStyles: {
+        container: {
+          backgroundColor: '#E0F4E4'
+        },
+      }
+    },
+    '2022-11-21': {
+      customStyles: {
+        container: {
+          backgroundColor: '#BCE8C5'
+        },
+      }
+    },
+    '2022-11-23': {
+      customStyles: {
+        container: {
+          backgroundColor: '#BCE8C5'
+        },
+      }
+    },
+    '2022-11-24': {
+      customStyles: {
+        container: {
+          backgroundColor: '#8FD99F',
+        },
+      }
+    },
+
   };
 
   // 안드로이드를 위한 모달 visible 상태값
@@ -180,7 +290,7 @@ export const CalenderApp = () => {
               <TouchableOpacity onPress={displaytMyStep}>
                 <Text style={styles.headerText}>{myStep} 베지테리언</Text>
               </TouchableOpacity>
-              <Text style={styles.headerText}>686일째</Text>
+              <Text style={styles.headerText}>{daynum}일째</Text>
             </View>
           </ImageBackground>
         </View>
