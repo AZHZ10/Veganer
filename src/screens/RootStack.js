@@ -5,7 +5,7 @@ import { Chat } from "../screens/ChatScreen";
 
 // import CameraStackScreen from "./CameraStack";
 import RectangleScannerScreen from "../components/RectangleScannerScreen";
-import MenuResultScreen from "./MenuResultScreen";
+import MenuInfoScreen from "./MenuInfoScreen";
 
 const Stack = createStackNavigator();
 const CameraStack = createStackNavigator();
@@ -57,7 +57,7 @@ const CameraStackScreen = () => {
           })}
           component = {RectangleScannerScreen} />
         <CameraStack.Screen 
-          name = 'MenuResult'
+          name = 'MenuInfo'
           options={({navigation, route}) => ({
             headerShown: true,
             headerTransparent: false,
@@ -67,7 +67,7 @@ const CameraStackScreen = () => {
               fontSize: 16
             }
           })}
-          component = {MenuResultScreen} />
+          component = {MenuInfoScreen} />
       </Stack.Navigator>
     )
   }

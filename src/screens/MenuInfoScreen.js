@@ -1,26 +1,45 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, useLayoutEffect, SafeAreaView, FlatList} from 'react-native';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
-import {menu, info} from '../screens/menuConstants';
+import {menu, info} from './menuConstants';
 import Loader from '../components/loadingComponent';
 //이미지
 import warnImg from "../screens/images/warning.png";
 import nonImg from "../screens/images/non.png";
 import { tan } from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { get } from '@tradle/react-native-http';
 
-const MenuResultScreen = () => {
+const SEVER_URL = 'http://52.78.24.230:5000/ocr'
+
+const MenuInfoScreen = () => {
     const [loading] = useState(false);
+    const [menuInfos, setMenuInfos] = useState('');
     //json code -> 추후에 서버랑 연결하고 코드 변경할 예정
-    const markResultItems = ({item, index}) => {
+      //OCR 실행
+     useEffect(() => {
+      const getInfos = async() => {
+       console.log("start get menu infos")
+       try{
+         const response = await fetch(SEVER_URL, {method: "GET"});
+         const json = await response.json();
+         setMenuInfos(JSON.parse(json));
+         console.log(JSON.parse(json))
+       } catch(error){
+         console.log(error)
+       }
+     }
+     getInfos();
+    }, []);
+    const menuResultItems = ({item, index}) => {
       return (
         <View style={styles.tablerow}>
           <View style={styles.table_colL}>
-           {item.nonv == false && (
+           {item.nonv == '논비건가능성' && (
              <Image source={warnImg} style= {styles.image} />
            )}
-           {item.nonv == true && (
+           {item.nonv == '논비건확정' && (
             <Image source={nonImg} style= {styles.image} />
           )}
           </View>
@@ -78,8 +97,8 @@ const MenuResultScreen = () => {
          <View style={styles.flat_container}>
            <FlatList
              style={styles.list}
-             data={menu}
-             renderItem={markResultItems}
+             data={menuInfos}
+             renderItem={menuResultItems}
              keyExtractor={(item, index) => index.toString()}
            />
          </View> 
@@ -188,4 +207,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MenuResultScreen;
+export default MenuInfoScreen;

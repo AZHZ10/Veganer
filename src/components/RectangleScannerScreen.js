@@ -11,7 +11,7 @@ import {
 } from 'react-native-responsive-screen'; 
 import { thisTypeAnnotation } from '@babel/types';
 
-
+const PRE_URL = 'https://fg6hh1w44g.execute-api.us-east-1.amazonaws.com/veganerpost'
 
 export default class RectangleScannerScreen extends PureComponent {
   static propTypes = {
@@ -136,7 +136,7 @@ export default class RectangleScannerScreen extends PureComponent {
 
     //api url 받아옴
     try{
-      const response = await axios.post('https://*******.execute-api.us-east-1.amazonaws.com/veganerpost', fn);
+      const response = await axios.post(PRE_URL, fn);
       this.setState({presignedUrl: response.data.body});
       console.log("----response url----");
       console.log(this.state.presignedUrl);
@@ -158,7 +158,7 @@ export default class RectangleScannerScreen extends PureComponent {
       console.log(err);
     }
 
-   this.props.navigation.navigate('MenuResult', {
+   this.props.navigation.navigate('MenuInfo', {
      menuImages: this.state.presignedUrl,
    });
   }
