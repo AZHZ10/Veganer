@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Modal, View, Pressable, Text, SafeAreaView, TouchableHighlight } from "react-native";
-
-const Button_Dictionary = () => {
-  
-};
+import { StyleSheet, Modal, View, Pressable, Text, SafeAreaView} from "react-native";
 
 function UploadModeModal({
   visible, 
