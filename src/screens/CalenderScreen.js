@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const Width = Dimensions.get('window').width;    //스크린 너비 초기화
 const Height = Dimensions.get('window').height;  //스크린 높이 초기화
 const VEG_STEP_STORAGE_KEY = '@VegetarianismStep';
+const VEG_STARTDATE_KEY = '@StepStartDate';
 
 // 이 부분 필요한지 검토
 const Container = styled.View`
@@ -85,16 +86,8 @@ const styles = StyleSheet.create({
 
 export const CalenderApp = () => {
 
-  const markedDates = {
-    '2022-11-01': {
-      customStyles: {
-        container: {
-          backgroundColor: '#BCE8C5'
-        },
-      }
-    },
-
-    '2022-11-03': {
+  const markedDates = { //markedDayValue
+    '2022-12-03': {
       customStyles: {
         container: {
           backgroundColor: '#8FD99F'
@@ -102,7 +95,7 @@ export const CalenderApp = () => {
       }
     },
 
-    '2022-11-04': {
+    '2022-12-04': {
       customStyles: {
         container: {
           backgroundColor: '#BCE8C5',
@@ -110,110 +103,10 @@ export const CalenderApp = () => {
       }
     },
 
-    '2022-11-05': {
-      customStyles: {
-        container: {
-          backgroundColor: '#8FD99F'
-        },
-      }
-    },
-
-    '2022-11-06': {
-      customStyles: {
-        container: {
-          backgroundColor: '#BCE8C5',
-        },
-      }
-    },
-
-    '2022-11-08': {
+    '2022-12-08': {
       customStyles: {
         container: {
           backgroundColor: '#E0F4E4'
-        },
-      }
-    },
-    '2022-11-09': {
-      customStyles: {
-        container: {
-          backgroundColor: '#8FD99F'
-        },
-      }
-    },
-    '2022-11-10': {
-      customStyles: {
-        container: {
-          backgroundColor: '#BCE8C5',
-        },
-      }
-    },
-    '2022-11-12': {
-      customStyles: {
-        container: {
-          backgroundColor: '#E0F4E4'
-        },
-      }
-    },
-    '2022-11-13': {
-      customStyles: {
-        container: {
-          backgroundColor: '#8FD99F'
-        },
-      }
-    },
-    '2022-11-14': {
-      customStyles: {
-        container: {
-          backgroundColor: '#E0F4E4'
-        },
-      }
-    },
-    '2022-11-15': {
-      customStyles: {
-        container: {
-          backgroundColor: '#BCE8C5'
-        },
-      }
-    },
-    '2022-11-17': {
-      customStyles: {
-        container: {
-          backgroundColor: '#BCE8C5'
-        },
-      }
-    },
-    '2022-11-18': {
-      customStyles: {
-        container: {
-          backgroundColor: '#8FD99F',
-        },
-      }
-    },
-    '2022-11-20': {
-      customStyles: {
-        container: {
-          backgroundColor: '#E0F4E4'
-        },
-      }
-    },
-    '2022-11-21': {
-      customStyles: {
-        container: {
-          backgroundColor: '#BCE8C5'
-        },
-      }
-    },
-    '2022-11-23': {
-      customStyles: {
-        container: {
-          backgroundColor: '#BCE8C5'
-        },
-      }
-    },
-    '2022-11-24': {
-      customStyles: {
-        container: {
-          backgroundColor: '#8FD99F',
         },
       }
     },
@@ -234,14 +127,17 @@ export const CalenderApp = () => {
 
   const [displaySelectStep, setDisplaySelectStep] = useState(false);
   const [myStep, setMyStep] = useState("");
+  const [startDay, setStartDay] = useState("");
   const displaytMyStep = () => {
     displaySelectStep ? setDisplaySelectStep(false) : setDisplaySelectStep(true);
   }
   const selectMyStep = (event) => {
     const selectedStep = event._targetInst.child.memoizedProps
+    setStartDay(new Date());
     setMyStep(selectedStep);
     storeLocalStorage(VEG_STEP_STORAGE_KEY, selectedStep);
     setDisplaySelectStep(false);
+    storeLocalStorage(VEG_STARTDATE_KEY, startDay);
   }
   const MyStepList = ["폴로", "페스코", "락토-오보", "락토", "오보", "비건", "플렉시"];
   const MyStepView = () => {
@@ -255,13 +151,16 @@ export const CalenderApp = () => {
       </View>
     )
   }
-
+  // 로컬 데이터 불러오는 함수
   useEffect(() => {
     const initCalendar = async () => {
       try {
         const vegStepValue = await AsyncStorage.getItem(VEG_STEP_STORAGE_KEY)
+        const startDayValue = await AsyncStorage.getItem(VEG_STARTDATE_KEY)
         setMyStep(JSON.parse(vegStepValue));
         console.log(vegStepValue);
+        setStartDay(JSON.parse(startDayValue));
+        console.log(startDayValue);
         //밑으로 불러오는 거 작성
       } catch (e) {
         console.log('initCalendar error:', e);
@@ -270,6 +169,7 @@ export const CalenderApp = () => {
     initCalendar();
   }, []);
 
+  // 로컬 데이터에 저장하는 함수
   const storeLocalStorage = async (storageKey, value) => {//첫 번째 인자를 키, 두 번째 인자를 값으로 함수 사용
     try {
       const jsonValue = JSON.stringify(value);
@@ -280,10 +180,15 @@ export const CalenderApp = () => {
     }
   }
 
+  // 채식 날짜 계산
+  const today = new Date();
+  const diff = today-startDay;
+  var currDay = 24 * 60 * 60 * 1000;
+  const daynum = parseInt(diff/currDay)
+
   return (
     <>
       <Container>
-
         <View style={styles.header}>
           <ImageBackground source={require('./cal-img1.jpg')} style={styles.bgImage}>
             <View style={styles.headerTextView}>
