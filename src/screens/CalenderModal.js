@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, Modal, View, Pressable, Text, SafeAreaView} from "react-native";
+import { Modal, View, Pressable, Text, SafeAreaView} from "react-native";
+import styles from './styles.js';
 
 function UploadModeModal({
   visible, 
@@ -53,51 +54,5 @@ function UploadModeModal({
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  background: {
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  whiteBox: {
-    width: 250,
-    backgroundColor: "white",
-    borderRadius: 10,
-    elevation: 5,
-    padding : 20
-  },
-  time : {
-    flexDirection : 'row',
-    alignItems : "stretch"
-  },
-  timeButton : {
-    borderWidth:1,
-    borderColor:'rgba(0,0,0,0.2)',
-    alignItems:'center',
-    justifyContent:'center',
-    width:70,
-    height:30,
-    backgroundColor:'#fff',
-    borderRadius:50,
-  },
-  actionButton: {
-    padding: 16,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  icon: {
-    marginRight: 8,
-  },
-  text: {
-    fontSize: 26,
-  },
-  buttonContainer : {
-    width : 70,
-    alignItems : 'center',
-    border : 1
-  }
-});
 
 export default UploadModeModal;
