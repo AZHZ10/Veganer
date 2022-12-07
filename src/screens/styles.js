@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
+    // calendar styles
     header: {
       flex: 1.15
     },
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
       borderRadius: 20,
       paddingVertical: 10,
     },
+    // modal styles
     background: {
         backgroundColor: "rgba(0, 0, 0, 0.1)",
         flex: 1,

@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { View, Dimensions, StyleSheet, ImageBackground, Text, TouchableOpacity } from 'react-native';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { View, Dimensions, ImageBackground, Text, TouchableOpacity } from 'react-native';
+import { Calendar } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
-import CalendarHeader from 'react-native-calendars/src/calendar/header';
 import Icon from 'react-native-vector-icons/AntDesign';
-import UploadModeModal from "../modal/CalenderModal";
+import UploadModeModal from "./CalenderModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import styles from './styles.js';
 
-const Width = Dimensions.get('window').width;    //스크린 너비 초기화
-const Height = Dimensions.get('window').height;  //스크린 높이 초기화
 const VEG_STEP_STORAGE_KEY = '@VegetarianismStep';
 const VEG_STARTDATE_KEY = '@StepStartDate';
 
@@ -18,12 +16,6 @@ const Container = styled.View`
   flex: 1;
 `;
 
-// 채식 날짜 계산
-const today = new Date(); // 오늘
-const startDay = new Date("2022-08-31");
-const diff = today-startDay;
-var currDay = 24 * 60 * 60 * 1000;
-const daynum = parseInt(diff/currDay)
 LocaleConfig.locales['fr'] = {
   monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
   monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
@@ -32,57 +24,6 @@ LocaleConfig.locales['fr'] = {
   today: 'Aujourd\'hui'
 };
 LocaleConfig.defaultLocale = 'fr';
-
-const styles = StyleSheet.create({
-  header: {
-    flex: 1.15
-  },
-  headerTextView: {
-    padding: 30
-  },
-  headerText: {
-    fontSize: 25,
-    color: 'white',
-  },
-  calendar: {
-    flex: 5,
-    backgroundColor: 'white',
-    padding: 1
-  },
-  bgImage: {
-    width: '100%', height: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  selectBtn: {
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    borderColor: '#60BF81',
-    borderWidth: 1,
-    borderRadius: 10,
-    width: 70,
-    padding: 5,
-    textAlign: 'center',
-    margin: 10
-  },
-  selectBtnContainer: {
-    flex: 1,
-    alignContent: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    position: "absolute",
-    top: 70,
-    left: 40,
-    zIndex: 3,
-    width: "80%",
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderColor: '#60BF81',
-    borderRadius: 20,
-    paddingVertical: 10,
-  }
-
-})
 
 export const CalenderApp = () => {
 
