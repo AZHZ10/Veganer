@@ -139,7 +139,7 @@ export const CalenderApp = () => {
             </Pressable>
           </SafeAreaView>
           <View style = {{alignItems:'center'}}>
-            <Pressable onPress = {deleteMarkedDate}>
+            <Pressable onPress = {(day)=>deleteMarkedDate(selectedDate)}>
               <Text style={styles.deleteBtn}>오늘 기록 초기화</Text>
             </Pressable>
           </View>
@@ -149,9 +149,9 @@ export const CalenderApp = () => {
   };
 
   const dayPress = (day) => {
-    displayMySelection();
     setSelectedDate(day.dateString);
-    console.log(selectedDate);
+    displayMySelection();
+    console.log('selectedDate',selectedDate);
   };
 
   // 표시 onpress 눌렀을 때 실행될 함수
@@ -211,9 +211,9 @@ export const CalenderApp = () => {
     const newMarkedDate = {...markedDatesList};
     delete newMarkedDate[key];
     console.log('delete');
-    setDisplayMealSelection(false);
     setMarkedDates(newMarkedDate);
     saveMarkedDates(newMarkedDate);
+    setDisplayMealSelection(false);
   };
 
   return (
