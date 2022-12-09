@@ -33,7 +33,31 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       margin: 10
     },
+    deleteBtn: {
+      backgroundColor: '#60BF81',
+      borderRadius: 10,
+      width: 180,
+      padding: 5,
+      textAlign: 'center',
+      margin: 10
+    },
     selectBtnContainer: {
+      flex: 1,
+      alignContent: "center",
+      justifyContent: "center",
+      flexDirection: "row",
+      flexWrap: "wrap",
+      position: "absolute",
+      top: 70,
+      left: 40,
+      zIndex: 3,
+      width: "80%",
+      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      borderColor: '#60BF81',
+      borderRadius: 20,
+      paddingVertical: 10,
+    },
+    selectMealContainer : {
       flex: 1,
       alignContent: "center",
       justifyContent: "center",
@@ -57,10 +81,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
       },
       whiteBox: {
-        width: 250,
-        backgroundColor: "white",
+        width: 300,
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
         borderRadius: 10,
-        elevation: 5,
         padding : 20
       },
       time : {
@@ -87,7 +110,8 @@ const styles = StyleSheet.create({
       },
       text: {
         fontSize: 20,
-        fontWeight:"bold"
+        fontWeight:"bold",
+        paddingBottom : 10
       },
       buttonContainer : {
         width : 70,
