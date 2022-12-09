@@ -29,7 +29,6 @@ npm install
 <p align="center">
     <img src="https://user-images.githubusercontent.com/88617509/206687550-3c5d8809-7939-4e49-be6d-38edfa567906.gif">
 </p>
-![gif-lens](https://user-images.githubusercontent.com/88617509/206687550-3c5d8809-7939-4e49-be6d-38edfa567906.gif)
 - 사용자는 하단 탭에서 카메라 버튼을 클릭하여 메뉴 이미지를 직접 찍거나 
 앨범에서 가져올 수 있습니다.
 - Easy OCR로 메뉴 이름을 읽어 특정 메뉴에 일반적으로 무조건 들어가는 논비건 재료가 있다면 논비건, 만드는 사람에 따라 들어갈 수도, 안 들어갈 수도 있는 논비건 재료가 있을 경우 
@@ -40,9 +39,8 @@ npm install
 
 ### 2. Chatbot
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/88617509/206687382-370ea383-3b9d-4117-91e9-8b266ac9bef2.gif">
+    <img src="https://user-images.githubusercontent.com/88617509/206687382-370ea383-3b9d-4117-91e9-8b266ac9bef2.gif" width="360" height="800">
 </p>
-![gif-chat](https://user-images.githubusercontent.com/88617509/206687382-370ea383-3b9d-4117-91e9-8b266ac9bef2.gif)
 - 비건의 정의, 채식의 단계 등 채식에 대한 일반적인 지식, FAQ, 약 400개 메뉴에 대한 논비건 여부 및 주의 재료 정보 제공
 - Sentence Transformer를 활용해 사용자 질문 문장의 임베딩 값을 계산하고 챗봇이 갖고 있는 질문 임베딩 데이터셋과 cosine 유사도 계산한 뒤 유사도가 최대인 임베딩 값에 대한 답변을 출력합니다.
 
