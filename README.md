@@ -36,13 +36,15 @@ npm install
 - 논비건 재료가 무조건 들어가는 메뉴에 대해서는 `X` 아이콘을, 논비건일 가능성이 있다면 `경고` 아이콘을 표시
 - 각 메뉴에 일반적으로 포함되거나 포함될 수 있는 논비건 재료에 대한 정보를 
 표로 구성하여 제공
+> 렌즈의 api를 제공하는 flask 서버 코드는 https://github.com/AZHZ10/Veganer-lens-backend.git에 있습니다.
 
 ### 2. Chatbot
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/88617509/206687382-370ea383-3b9d-4117-91e9-8b266ac9bef2.gif" width="360" height="800">
+    <img src="https://user-images.githubusercontent.com/88617509/206691262-54848169-4f04-4949-a8e1-5cff968ae25a.gif">
 </p>
 - 비건의 정의, 채식의 단계 등 채식에 대한 일반적인 지식, FAQ, 약 400개 메뉴에 대한 논비건 여부 및 주의 재료 정보 제공
 - Sentence Transformer를 활용해 사용자 질문 문장의 임베딩 값을 계산하고 챗봇이 갖고 있는 질문 임베딩 데이터셋과 cosine 유사도 계산한 뒤 유사도가 최대인 임베딩 값에 대한 답변을 출력합니다.
+> 챗봇의 api를 제공하는 flask 서버 코드는 https://github.com/AZHZ10/Veganer-chatbot-backend.git에 있습니다.
 
 ### 3. Calendar
 - 자신의 채식 단계를 설정하면, 설정한 날을 시작일로 하여 나의 채식 기간을 표시
