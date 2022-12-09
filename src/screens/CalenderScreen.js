@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { View, Dimensions, ImageBackground, Text, TouchableOpacity, Pressable } from 'react-native';
+import { View, Dimensions, ImageBackground, Text, TouchableOpacity, Pressable, SafeAreaView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import { format } from "date-fns";
@@ -29,33 +29,6 @@ LocaleConfig.defaultLocale = 'fr';
 
 export const CalenderApp = () => {
 
-/*   const markedDates = {
-    '2022-12-03': {
-      customStyles: {
-        container: {
-          backgroundColor: '#8FD99F'
-        },
-      }
-    },
-
-    '2022-12-04': {
-      customStyles: {
-        container: {
-          backgroundColor: '#BCE8C5',
-        },
-      }
-    },
-
-    '2022-12-08': {
-      customStyles: {
-        container: {
-          backgroundColor: '#E0F4E4'
-        },
-      }
-    },
-
-  }; */
-
   // 안드로이드를 위한 모달 visible 상태값
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -69,10 +42,16 @@ export const CalenderApp = () => {
   }
 
   const [displaySelectStep, setDisplaySelectStep] = useState(false);
+  const [displayMealSelection, setDisplayMealSelection] = useState(false);
+
   const [myStep, setMyStep] = useState("");
   const [startDay, setStartDay] = useState(format(new Date(), "yyyy-MM-dd"),);
+
   const displaytMyStep = () => {
     displaySelectStep ? setDisplaySelectStep(false) : setDisplaySelectStep(true);
+  }
+  const displayMySelection = () => {
+    displayMealSelection ? setDisplayMealSelection(false) : setDisplayMealSelection(true);
   }
   const selectMyStep = (event) => {
     const selectedStep = event._targetInst.child.memoizedProps
@@ -82,6 +61,7 @@ export const CalenderApp = () => {
     setDisplaySelectStep(false);
     storeLocalStorage(VEG_STARTDATE_KEY, startDay);
   }
+
   const MyStepList = ["폴로", "페스코", "락토-오보", "락토", "오보", "비건", "플렉시"];
   const MyStepView = () => {
     return (
@@ -95,22 +75,7 @@ export const CalenderApp = () => {
     )
   }
 
-  const SelectMealView = () => {
-    return (
-      <View style={styles.selectMealContainer}>
-          <Pressable
-          style={styles.buttonContainer}
-          onPress = {deleteMarkedDate}>
-          <Text>표시</Text>
-        </Pressable>
-        <Pressable
-          style={styles.buttonContainer}
-          onPress = {deleteMarkedDate}>
-          <Text>삭제</Text>
-        </Pressable>
-      </View>
-    )
-  };
+
 
   // 로컬 데이터 불러오는 함수
   useEffect(() => {
@@ -153,15 +118,76 @@ export const CalenderApp = () => {
   // 배열대신 object 사용
   const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [markedDatesList, setMarkedDates] = useState({});
-  
-  const saveMarkedDates = async (toSave) => {
-    await AsyncStorage.setItem(MARKED_DATE_KEY, JSON.stringify(toSave))
+
+  const SelectMealView = (day) => {
+    return (
+      <View style={styles.selectMealContainer}>
+        <View style={styles.whiteBox}>
+          <View style = {{marginBottom:10}}>
+            <Text style={styles.text}>오늘의 식사</Text>
+            <Text>하루 세 끼 중 비건식으로 몇 번 드셨나요?</Text>
+          </View>
+          <SafeAreaView style={styles.time}>
+            <Pressable onPress = {onpress_save1}>
+              <Text style={styles.selectBtn}>1</Text>
+            </Pressable>
+            <Pressable onPress = {onpress_save2}>
+              <Text style={styles.selectBtn}>2</Text>
+            </Pressable>
+            <Pressable onPress = {onpress_save3}>
+              <Text style={styles.selectBtn}>3</Text>
+            </Pressable>
+          </SafeAreaView>
+          <View style = {{alignItems:'center'}}>
+            <Pressable onPress = {deleteMarkedDate}>
+              <Text style={styles.deleteBtn}>오늘 기록 초기화</Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
+    )
   };
 
-  const dayPress = async (day) => {
+  const dayPress = (day) => {
+    displayMySelection();
     setSelectedDate(day.dateString);
     console.log(selectedDate);
+  };
 
+  // 표시 onpress 눌렀을 때 실행될 함수
+  const onpress_save1 = async () => {
+    const newMarkedDate = Object.assign({}, markedDatesList, {
+      [selectedDate]:{
+        customStyles: {
+          container: {
+            backgroundColor: '#E0F4E4'
+          },
+        }
+      }
+    });
+    setMarkedDates(newMarkedDate);
+    await saveMarkedDates(newMarkedDate);
+    setDisplayMealSelection(false);
+  };
+
+    // 표시 onpress 눌렀을 때 실행될 함수
+    const onpress_save2 = async () => {
+      const newMarkedDate = Object.assign({}, markedDatesList, {
+        [selectedDate]:{
+          customStyles: {
+            container: {
+              backgroundColor: '#BCE8C5'
+            },
+          }
+        }
+      });
+      setMarkedDates(newMarkedDate);
+      await saveMarkedDates(newMarkedDate);
+      setDisplayMealSelection(false);
+    };
+
+      // 표시 onpress 눌렀을 때 실행될 함수
+  const onpress_save3 = async () => {
     const newMarkedDate = Object.assign({}, markedDatesList, {
       [selectedDate]:{
         customStyles: {
@@ -173,13 +199,21 @@ export const CalenderApp = () => {
     });
     setMarkedDates(newMarkedDate);
     await saveMarkedDates(newMarkedDate);
-  };
+    setDisplayMealSelection(false);
+    };
 
-  const deleteMarkedDate = async (key) => {
+    // 로컬에 저장하는 함수
+    const saveMarkedDates = async (toSave) => {
+      await AsyncStorage.setItem(MARKED_DATE_KEY, JSON.stringify(toSave))
+    };
+
+  const deleteMarkedDate = (key) => {
     const newMarkedDate = {...markedDatesList};
     delete newMarkedDate[key];
+    console.log('delete');
+    setDisplayMealSelection(false);
     setMarkedDates(newMarkedDate);
-    await saveMarkedDates(newMarkedDate);
+    saveMarkedDates(newMarkedDate);
   };
 
   return (
@@ -197,8 +231,11 @@ export const CalenderApp = () => {
         </View>
 
         {displaySelectStep && <MyStepView />}
+        
+        
 
         <View style={styles.calendar}>
+          
           <Calendar
             markingType={'custom'}
             markedDates={markedDatesList}
@@ -290,7 +327,9 @@ export const CalenderApp = () => {
           /** Replace default month and year title with custom one. the function receive a date as parameter. */
           //renderHeader={(date) => {/*Return JSX*/}}
           />
+          {displayMealSelection && <SelectMealView/>}
         </View>
+        
       </Container>
 
       <UploadModeModal
