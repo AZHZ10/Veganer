@@ -57,5 +57,6 @@ npm install
     <img src="https://user-images.githubusercontent.com/29935149/206724084-2ae7f271-f136-45d4-852c-ffbb3b35295f.gif">
     <img src="https://user-images.githubusercontent.com/29935149/206724074-514fad79-addb-4893-9a49-046a86f35c0a.gif">
 </p>
+
 - 자신의 채식 단계를 설정하면, 설정한 날을 시작일로 하여 나의 채식 기간을 표시
 - 사용자는 해당하는 날짜를 눌러 하루 세 번의 식사 중 채식을 실천한 횟수를 기록. 하루 세 번의 식사 중 채식을 실천한 횟수가 많을수록 더 짙은 초록색으로 달력에 표시
