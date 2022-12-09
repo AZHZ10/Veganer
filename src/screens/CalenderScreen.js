@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { View, Dimensions, ImageBackground, Text, TouchableOpacity } from 'react-native';
+import { View, Dimensions, ImageBackground, Text, TouchableOpacity, Pressable } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
+import { format } from "date-fns";
 import Icon from 'react-native-vector-icons/AntDesign';
 import UploadModeModal from "./CalenderModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,6 +11,7 @@ import styles from './styles.js';
 
 const VEG_STEP_STORAGE_KEY = '@VegetarianismStep';
 const VEG_STARTDATE_KEY = '@StepStartDate';
+const MARKED_DATE_KEY = '@markedDates';
 
 // 이 부분 필요한지 검토
 const Container = styled.View`
@@ -27,7 +29,7 @@ LocaleConfig.defaultLocale = 'fr';
 
 export const CalenderApp = () => {
 
-  const markedDates = { //markedDayValue
+/*   const markedDates = {
     '2022-12-03': {
       customStyles: {
         container: {
@@ -52,7 +54,7 @@ export const CalenderApp = () => {
       }
     },
 
-  };
+  }; */
 
   // 안드로이드를 위한 모달 visible 상태값
   const [modalVisible, setModalVisible] = useState(false);
@@ -68,7 +70,7 @@ export const CalenderApp = () => {
 
   const [displaySelectStep, setDisplaySelectStep] = useState(false);
   const [myStep, setMyStep] = useState("");
-  const [startDay, setStartDay] = useState("");
+  const [startDay, setStartDay] = useState(format(new Date(), "yyyy-MM-dd"),);
   const displaytMyStep = () => {
     displaySelectStep ? setDisplaySelectStep(false) : setDisplaySelectStep(true);
   }
@@ -92,15 +94,36 @@ export const CalenderApp = () => {
       </View>
     )
   }
+
+  const SelectMealView = () => {
+    return (
+      <View style={styles.selectMealContainer}>
+          <Pressable
+          style={styles.buttonContainer}
+          onPress = {deleteMarkedDate}>
+          <Text>표시</Text>
+        </Pressable>
+        <Pressable
+          style={styles.buttonContainer}
+          onPress = {deleteMarkedDate}>
+          <Text>삭제</Text>
+        </Pressable>
+      </View>
+    )
+  };
+
   // 로컬 데이터 불러오는 함수
   useEffect(() => {
     const initCalendar = async () => {
       try {
-        const vegStepValue = await AsyncStorage.getItem(VEG_STEP_STORAGE_KEY)
-        const startDayValue = await AsyncStorage.getItem(VEG_STARTDATE_KEY)
+        const vegStepValue = await AsyncStorage.getItem(VEG_STEP_STORAGE_KEY);
+        const startDayValue = await AsyncStorage.getItem(VEG_STARTDATE_KEY);
+        const markedDayValue = await AsyncStorage.getItem(MARKED_DATE_KEY);
         setMyStep(JSON.parse(vegStepValue));
         console.log(vegStepValue);
         setStartDay(JSON.parse(startDayValue));
+        console.log(startDayValue);
+        setMarkedDates(JSON.parse(markedDayValue));
         console.log(startDayValue);
         //밑으로 불러오는 거 작성
       } catch (e) {
@@ -127,6 +150,38 @@ export const CalenderApp = () => {
   var currDay = 24 * 60 * 60 * 1000;
   const daynum = parseInt(diff/currDay)
 
+  // 배열대신 object 사용
+  const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy-MM-dd"));
+  const [markedDatesList, setMarkedDates] = useState({});
+  
+  const saveMarkedDates = async (toSave) => {
+    await AsyncStorage.setItem(MARKED_DATE_KEY, JSON.stringify(toSave))
+  };
+
+  const dayPress = async (day) => {
+    setSelectedDate(day.dateString);
+    console.log(selectedDate);
+
+    const newMarkedDate = Object.assign({}, markedDatesList, {
+      [selectedDate]:{
+        customStyles: {
+          container: {
+            backgroundColor: '#8FD99F'
+          },
+        }
+      }
+    });
+    setMarkedDates(newMarkedDate);
+    await saveMarkedDates(newMarkedDate);
+  };
+
+  const deleteMarkedDate = async (key) => {
+    const newMarkedDate = {...markedDatesList};
+    delete newMarkedDate[key];
+    setMarkedDates(newMarkedDate);
+    await saveMarkedDates(newMarkedDate);
+  };
+
   return (
     <>
       <Container>
@@ -136,7 +191,7 @@ export const CalenderApp = () => {
               <TouchableOpacity onPress={displaytMyStep}>
                 <Text style={styles.headerText}>{myStep} 베지테리언</Text>
               </TouchableOpacity>
-              <Text style={styles.headerText}>{daynum}일째</Text>
+              <Text style={styles.headerText}>{daynum+1}일째</Text>
             </View>
           </ImageBackground>
         </View>
@@ -146,7 +201,7 @@ export const CalenderApp = () => {
         <View style={styles.calendar}>
           <Calendar
             markingType={'custom'}
-            markedDates={markedDates}
+            markedDates={markedDatesList}
 
             theme={{
               'stylesheet.day.basic': {
@@ -167,7 +222,8 @@ export const CalenderApp = () => {
               calendarBackground: '#ffffff',
               textSectionTitleColor: '#b6c1cd',
               textSectionTitleDisabledColor: '#d9e1e8',
-              selectedDayTextColor: '#ffffff',
+              selectedDayTextColor: 'black',
+              selectedDayBackgroundColor: '',
               todayTextColor: '#009688',
               dayTextColor: '#2d4150',
               textDisabledColor: '#d9e1e8',
@@ -194,7 +250,7 @@ export const CalenderApp = () => {
             // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
             maxDate={'2030-12-31'}
             // Handler which gets executed on day press. Default = undefined
-            onDayPress={modalOpen}
+            onDayPress={(day) => {dayPress(day)}}
             // Handler which gets executed on day long press. Default = undefined
             onDayLongPress={(day) => { console.log('selected day', day) }}
             // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
